@@ -7,7 +7,7 @@ import (
 	"strconv"
 
 	"github.com/docopt/docopt-go"
-	sdk "github.com/nbltrust/jadepool-saas-sdk-go"
+	sdk "github.com/nbltrust/jadepool-saas-sdk-golang"
 )
 
 func runCommand(arguments docopt.Opts) (*sdk.Result, error) {
