@@ -7,7 +7,7 @@ import (
 	"strconv"
 
 	"github.com/docopt/docopt-go"
-	sdk "github.com/nbltrust/jadepool-saas-sdk-golang"
+	sdk "github.com/nbltrust/jadepool-saas-sdk-go"
 )
 
 func runCommand(arguments docopt.Opts) (*sdk.Result, error) {
@@ -75,7 +75,7 @@ func runCommand(arguments docopt.Opts) (*sdk.Result, error) {
 			return nil, errors.New("invalid params")
 		}
 		expiredAt, err := strconv.ParseInt(params[3], 10, 64)
-		if err == nil {
+		if err != nil {
 			return nil, errors.New("invalid params")
 		}
 
@@ -97,11 +97,11 @@ func runCommand(arguments docopt.Opts) (*sdk.Result, error) {
 			return nil, errors.New("invalid params")
 		}
 		page, err := strconv.Atoi(params[0])
-		if err == nil {
+		if err != nil {
 			return nil, errors.New("invalid params")
 		}
 		amount, err := strconv.Atoi(params[1])
-		if err == nil {
+		if err != nil {
 			return nil, errors.New("invalid params")
 		}
 

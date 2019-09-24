@@ -35,10 +35,11 @@ func (c *Company) FundingTransferWithMemo(from, to, coinType, value, memo string
 	}
 
 	return c.session.post("/api/v1/funding/transfer", map[string]interface{}{
-		"from":  from,
-		"to":    to,
-		"value": value,
-		"memo":  memo,
+		"from":      from,
+		"to":        to,
+		"value":     value,
+		"assetName": coinType,
+		"memo":      memo,
 	})
 }
 

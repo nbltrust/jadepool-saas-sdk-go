@@ -9,11 +9,13 @@ import (
 	"encoding/json"
 	"fmt"
 
-	sdk "github.com/nbltrust/jadepool-saas-sdk-golang"
+	sdk "github.com/nbltrust/jadepool-saas-sdk-go"
 )
 
 func main() {
 	app := sdk.NewApp("appkey", "appsecret")
+	// specified server addr
+	// app := sdk.NewAppWithAddr("appkey", "appsecret", "http://127.0.0.1:8092")
 
 	result, _ := app.CreateAddress("ETH")
 	printResult(result)
@@ -42,19 +44,35 @@ func main() {
 	result, _ = app.Delegate("1569231558", "IRIS2", "1")
 	printResult(result)
 
-	result, _ = app.UnDelegate("1569231558", "IRIS2", "1")
+	result, _ = app.UnDelegate("1569231809", "IRIS2", "1")
+	printResult(result)
+
+	result, _ = app.AddUrgentStakingFunding("1569292076", "IRIS2", "1", 1569302076)
+	printResult(result)
+
+	company := sdk.NewCompany("appkey", "appsecret")
+	// specified server addr
+	// company := sdk.NewCompanyWithAddr("appkey", "appsecret", "http://127.0.0.1:8092")
+
+	result, _ = company.GetFundingWallets()
+	printResult(result)
+
+	result, _ = company.FundingTransfer("QrLxg3XgKPMR1O8", "ZKz8XpwXGPBAQVE", "BTC", "0.0001")
+	printResult(result)
+
+	result, _ = company.GetFundingRecords(1, 10)
 	printResult(result)
 }
     
 func printResult(result *sdk.Result) {
-    fmt.Println("code:", result.Code)
+	fmt.Println("code:", result.Code)
 	fmt.Println("message:", result.Message)
 	fmt.Println("data:")
 
 	b, err := json.MarshalIndent(result.Data, "", "  ")
 	if err != nil {
 		fmt.Println("error:", err)
-    }
+	}
 	fmt.Print(string(b))
 }
 ```
@@ -83,4 +101,12 @@ $ go run cmd/ctl/main.go "appkey" "appsecret" "GetValidators" "IRIS2"
 $ go run cmd/ctl/main.go "appkey" "appsecret" "Delegate" $(date +%s) "IRIS2" "1"
 # undelegate
 $ go run cmd/ctl/main.go "appkey" "appsecret" "UnDelegate" $(date +%s) "IRIS2" "1"
+# urgent staking funding
+$ go run cmd/ctl/main.go "appkey" "appsecret" "AddUrgentStakingFunding" $(date +%s) "IRIS2" "1" "1569302076"
+# get funding wallets
+$ go run cmd/ctl/main.go "companykey" "companysecret" "GetFundingWallets"
+# funding transfer
+$ go run cmd/ctl/main.go "companykey" "companysecret" "FundingTransfer" "QrLxg3XgKPMR1O8" "ZKz8XpwXGPBAQVE" "BTC" "0.0001"
+# get funding records
+$ go run cmd/ctl/main.go "companykey" "companysecret" "GetFundingRecords" 1 10
 ```

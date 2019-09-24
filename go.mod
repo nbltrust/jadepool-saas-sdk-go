@@ -1,4 +1,4 @@
-module github.com/nbltrust/jadepool-saas-sdk-golang
+module github.com/nbltrust/jadepool-saas-sdk-go
 
 go 1.13
 
