@@ -40,7 +40,7 @@ func (session *session) getWithParams(path string, params params) (*Result, erro
 		return nil, err
 	}
 	if r.Response().StatusCode != 200 {
-		return nil, errors.New(fmt.Sprintf("http error code:%d", r.Response().StatusCode))
+		return nil, fmt.Errorf("http error code:%d", r.Response().StatusCode)
 	}
 
 	var result Result
@@ -68,7 +68,7 @@ func (session *session) post(path string, params params) (*Result, error) {
 		return nil, err
 	}
 	if r.Response().StatusCode != 200 {
-		return nil, errors.New(fmt.Sprintf("http error code:%d", r.Response().StatusCode))
+		return nil, fmt.Errorf("http error code:%d", r.Response().StatusCode)
 	}
 
 	var result Result

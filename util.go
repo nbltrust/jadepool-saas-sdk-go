@@ -1,7 +1,7 @@
 package jadepoolsaas
 
 const (
-	defaultAddr = "http://saas.jadepool.io:8092"
+	defaultAddr = "https://openapi.jadepool.io"
 )
 
 type client interface {
