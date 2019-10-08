@@ -1,6 +1,7 @@
 package jadepoolsaas
 
 import (
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"strconv"
@@ -185,6 +186,31 @@ func TestGetValidators(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(queryHandler))
 	app := NewAppWithAddr(ts.URL, TestAppKey, TestAppSecret)
 	_, err := app.GetValidators(coin)
+	if err != nil {
+		t.Fatal(err)
+	}
+}
+
+func TestGetStakingInterest(t *testing.T) {
+	coin := "IRIS"
+	response := map[string]interface{}{}
+
+	queryHandler := func(w http.ResponseWriter, r *http.Request) {
+		if !strings.Contains(r.URL.Path, coin) {
+			t.Errorf("request url = %s; want contain %+v", r.URL.Path, coin)
+		}
+
+		_, err := writeSuccessResponse(w, response)
+		if err != nil {
+			t.Fatal(err)
+		}
+	}
+	ts := httptest.NewServer(http.HandlerFunc(queryHandler))
+	fmt.Println(ts.URL)
+	ts.URL = "http://127.0.0.1:8092"
+	app := NewAppWithAddr(ts.URL, TestAppKey, TestAppSecret)
+	result, err := app.GetStakingInterest(coin, "2019-09-26", "8")
+	fmt.Println(result)
 	if err != nil {
 		t.Fatal(err)
 	}

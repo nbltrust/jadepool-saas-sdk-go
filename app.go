@@ -120,6 +120,21 @@ func (a *App) GetValidators(coinType string) (*Result, error) {
 	return a.session.get("/api/v1/staking/" + coinType + "/validators")
 }
 
+// GetStakingInterest fetch one day interest for one cointype
+func (a *App) GetStakingInterest(coinType, date, timezone string) (*Result, error) {
+	if len(coinType) == 0 {
+		return nil, errors.New("coinType is empty")
+	}
+	if len(timezone) == 0 {
+		timezone = "8"
+	}
+
+	return a.session.getWithParams("/api/v1/staking/"+coinType+"/interest", map[string]interface{}{
+		"date":     date,
+		"timezone": timezone,
+	})
+}
+
 // AddUrgentStakingFunding add urgent staking funding.
 func (a *App) AddUrgentStakingFunding(id, coinType, value string, expiredAt int64) (*Result, error) {
 	if len(coinType) == 0 || len(id) == 0 || len(value) == 0 {

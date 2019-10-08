@@ -70,6 +70,11 @@ func runCommand(arguments docopt.Opts) (*sdk.Result, error) {
 			return nil, errors.New("invalid params")
 		}
 		return getApp(addr, key, secret).GetValidators(params[0])
+	case "GetStakingInterest":
+		if len(params) != 3 {
+			return nil, errors.New("invalid params")
+		}
+		return getApp(addr, key, secret).GetStakingInterest(params[0], params[1], params[2])
 	case "AddUrgentStakingFunding":
 		if len(params) != 4 {
 			return nil, errors.New("invalid params")
