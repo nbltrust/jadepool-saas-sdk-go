@@ -209,7 +209,7 @@ func TestGetStakingInterest(t *testing.T) {
 	fmt.Println(ts.URL)
 	ts.URL = "http://127.0.0.1:8092"
 	app := NewAppWithAddr(ts.URL, TestAppKey, TestAppSecret)
-	result, err := app.GetStakingInterest(coin, "2019-09-26", "8")
+	result, err := app.GetStakingInterest(coin, "2019-09-26")
 	fmt.Println(result)
 	if err != nil {
 		t.Fatal(err)
