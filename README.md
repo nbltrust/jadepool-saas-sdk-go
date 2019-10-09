@@ -102,7 +102,7 @@ $ go run cmd/ctl/main.go "appkey" "appsecret" "Delegate" $(date +%s) "IRIS2" "1"
 # undelegate
 $ go run cmd/ctl/main.go "appkey" "appsecret" "UnDelegate" $(date +%s) "IRIS2" "1"
 # get staking interest
-$ go run cmd/ctl/main.go "appkey" "appsecret" "GetStakingInterest" "IRIS2" "2019-09-26" "8"
+$ go run cmd/ctl/main.go "appkey" "appsecret" "GetStakingInterest" "IRIS2" "2019-09-26"
 # urgent staking funding
 $ go run cmd/ctl/main.go "appkey" "appsecret" "AddUrgentStakingFunding" $(date +%s) "IRIS2" "1" "1569302076"
 # get funding wallets
