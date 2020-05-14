@@ -47,7 +47,7 @@ func (a *App) VerifyAddress(coinType, address string) (*Result, error) {
 
 // GetAssets fetch all assets in the wallet.
 func (a *App) GetAssets() (*Result, error) {
-	return a.session.get("/api/v1/app/assets")
+	return a.session.get("/api/v2/app/assets")
 }
 
 // GetBalance get the balance for specified coin.
@@ -142,6 +142,54 @@ func (a *App) AddUrgentStakingFunding(id, coinType, value string, expiredAt int6
 		"id":        id,
 		"expiredAt": expiredAt,
 	})
+}
+
+// OTCSetSymbols set otc symbols.
+func (a *App) OTCSetSymbols(symbols []map[string]interface{}) (*Result, error) {
+	return a.session.post("/api/v1/otc/symbols", map[string]interface{}{
+		"symbols": symbols,
+	})
+}
+
+// OTCGetOrders get opening quote orders without feeding price.
+func (a *App) OTCGetOrders() (*Result, error) {
+	return a.session.get("/api/v1/otc/orders")
+}
+
+// OTCFeedPrice feed otc price.
+func (a *App) OTCFeedPrice(orderID, price, customID string, invalidAt int64) (*Result, error) {
+	return a.session.post("/api/v1/otc/orders/" + orderID + "/price", map[string]interface{}{
+		"price": price,
+		"customID": customID,
+		"invalidAt": invalidAt,
+	})
+}
+
+// OTCGetPriceByCustomID get the latest status of price.
+func (a *App) OTCGetPriceByCustomID(customID string) (*Result, error) {
+	if len(customID) == 0 {
+		return nil, errors.New("customID is empty")
+	}
+
+	return a.session.get("/api/v1/otc/price/custom/" + customID)
+}
+
+// OTCClosePriceByCustomID make a deal with the price.
+func (a *App) OTCClosePriceByCustomID(customID string) (*Result, error) {
+	if len(customID) == 0 {
+		return nil, errors.New("customID is empty")
+	}
+
+	return a.session.get("/api/v1/otc/price/custom/" + customID + "/close")
+}
+
+// OTCTerminatePriceByCustomID reject the price.
+func (a *App) OTCTerminatePriceByCustomID(customID string) (*Result, error) {
+	if len(customID) == 0 {
+		return nil, errors.New("customID is empty")
+	}
+
+	return a.session.get("/api/v1/otc/price/custom/" + customID + "/terminate")
 }
 
 // App represent a wallet.

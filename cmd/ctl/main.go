@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"strconv"
+	"strings"
 
 	"github.com/docopt/docopt-go"
 	sdk "github.com/nbltrust/jadepool-saas-sdk-go"
@@ -116,15 +117,62 @@ func runCommand(arguments docopt.Opts) (*sdk.Result, error) {
 			return nil, errors.New("invalid params")
 		}
 		page, err := strconv.Atoi(params[0])
-		if err == nil {
+		if err != nil {
 			return nil, errors.New("invalid params")
 		}
 		amount, err := strconv.Atoi(params[1])
-		if err == nil {
+		if err != nil {
 			return nil, errors.New("invalid params")
 		}
 
 		return getCompany(addr, key, secret).FilterFundingRecords(page, amount, params[2], params[3], params[4], params[5], params[6], params[7])
+
+	case "OTCSetSymbols":
+		if len(params) != 1 {
+			return nil, errors.New("invalid params")
+		}
+
+		symbols := []map[string]interface{}{}
+		err := json.NewDecoder(strings.NewReader(params[0])).Decode(&symbols)
+		if err != nil {
+			return nil, err
+		}
+		return getApp(addr, key, secret).OTCSetSymbols(symbols)
+
+	case "OTCGetOrders":
+		return getApp(addr, key, secret).OTCGetOrders()
+
+	case "OTCFeedPrice":
+		if len(params) != 4 {
+			return nil, errors.New("invalid params")
+		}
+
+		invalidAt, err := strconv.ParseInt(params[3], 10, 64)
+		if err != nil {
+			return nil, errors.New("invalid params")
+		}
+
+		return getApp(addr, key, secret).OTCFeedPrice(params[0], params[1], params[2], invalidAt)
+
+	case "OTCGetPriceByCustomID":
+		if len(params) != 1 {
+			return nil, errors.New("invalid params")
+		}
+
+		return getApp(addr, key, secret).OTCGetPriceByCustomID(params[0])
+
+	case "OTCClosePriceByCustomID":
+		if len(params) != 1 {
+			return nil, errors.New("invalid params")
+		}
+
+		return getApp(addr, key, secret).OTCClosePriceByCustomID(params[0])
+	case "OTCTerminatePriceByCustomID":
+		if len(params) != 1 {
+			return nil, errors.New("invalid params")
+		}
+
+		return getApp(addr, key, secret).OTCTerminatePriceByCustomID(params[0])
 	default:
 		return nil, errors.New("unknown action: " + action)
 	}
