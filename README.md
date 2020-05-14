@@ -15,7 +15,7 @@ import (
 func main() {
 	app := sdk.NewApp("appkey", "appsecret")
 	// specified server addr
-	// app := sdk.NewAppWithAddr("appkey", "appsecret", "http://127.0.0.1:8092")
+	// app := sdk.NewAppWithAddr("http://127.0.0.1:8092", "appkey", "appsecret")
 
 	result, _ := app.CreateAddress("ETH")
 	printResult(result)
