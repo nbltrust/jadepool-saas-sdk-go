@@ -142,6 +142,13 @@ func runCommand(arguments docopt.Opts) (*sdk.Result, error) {
 	case "OTCGetOrders":
 		return getApp(addr, key, secret).OTCGetOrders()
 
+	case "OTCGetOrder":
+		if len(params) != 1 {
+			return nil, errors.New("invalid params")
+		}
+
+		return getApp(addr, key, secret).OTCGetOrder(params[0])
+
 	case "OTCFeedPrice":
 		if len(params) != 4 {
 			return nil, errors.New("invalid params")

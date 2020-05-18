@@ -156,6 +156,11 @@ func (a *App) OTCGetOrders() (*Result, error) {
 	return a.session.get("/api/v1/otc/orders")
 }
 
+// OTCGetOrder get order by id.
+func (a *App) OTCGetOrder(orderID string) (*Result, error) {
+	return a.session.get("/api/v1/otc/order/" + orderID)
+}
+
 // OTCFeedPrice feed otc price.
 func (a *App) OTCFeedPrice(orderID, price, customID string, invalidAt int64) (*Result, error) {
 	return a.session.post("/api/v1/otc/orders/" + orderID + "/price", map[string]interface{}{
