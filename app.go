@@ -156,6 +156,11 @@ func (a *App) OTCGetOrders() (*Result, error) {
 	return a.session.get("/api/v1/otc/orders")
 }
 
+// OTCGetPrices get opening prices the app feed.
+func (a *App) OTCGetPrices() (*Result, error) {
+	return a.session.get("/api/v1/otc/prices")
+}
+
 // OTCGetOrder get order by id.
 func (a *App) OTCGetOrder(orderID string) (*Result, error) {
 	return a.session.get("/api/v1/otc/order/" + orderID)
@@ -195,6 +200,11 @@ func (a *App) OTCTerminatePriceByCustomID(customID string) (*Result, error) {
 	}
 
 	return a.session.get("/api/v1/otc/price/custom/" + customID + "/terminate")
+}
+
+// SystemGetTime get the system timestamp.
+func (a *App) SystemGetTime() (*Result, error) {
+	return a.session.get("/api/v1/system/time")
 }
 
 // App represent a wallet.

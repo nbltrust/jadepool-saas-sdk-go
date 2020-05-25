@@ -142,6 +142,9 @@ func runCommand(arguments docopt.Opts) (*sdk.Result, error) {
 	case "OTCGetOrders":
 		return getApp(addr, key, secret).OTCGetOrders()
 
+	case "OTCGetPrices":
+		return getApp(addr, key, secret).OTCGetPrices()
+
 	case "OTCGetOrder":
 		if len(params) != 1 {
 			return nil, errors.New("invalid params")
@@ -180,6 +183,9 @@ func runCommand(arguments docopt.Opts) (*sdk.Result, error) {
 		}
 
 		return getApp(addr, key, secret).OTCTerminatePriceByCustomID(params[0])
+		
+	case "SystemGetTime":
+		return getApp(addr, key, secret).SystemGetTime()
 	default:
 		return nil, errors.New("unknown action: " + action)
 	}
