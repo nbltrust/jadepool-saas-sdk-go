@@ -151,6 +151,19 @@ func (a *App) OTCSetSymbols(symbols []map[string]interface{}) (*Result, error) {
 	})
 }
 
+// OTCGetSymbols get otc symbols.
+func (a *App) OTCGetSymbols() (*Result, error) {
+	return a.session.get("/api/v1/otc/symbols")
+}
+
+// OTCDeleteSymbol delete otc symbol.
+func (a *App) OTCDeleteSymbol(baseCoinID, quoteCoinID uint) (*Result, error) {
+	return a.session.deleteWithParams("/api/v1/otc/symbol", map[string]interface{}{
+		"baseCoinID":     baseCoinID,
+		"quoteCoinID":        quoteCoinID,
+	})
+}
+
 // OTCGetOrders get opening quote orders without feeding price.
 func (a *App) OTCGetOrders() (*Result, error) {
 	return a.session.get("/api/v1/otc/orders")
@@ -173,6 +186,33 @@ func (a *App) OTCFeedPrice(orderID, price, customID string, invalidAt int64) (*R
 		"customID": customID,
 		"invalidAt": invalidAt,
 	})
+}
+
+// OTCGetPrice get the latest status of price.
+func (a *App) OTCGetPrice(priceID string) (*Result, error) {
+	if len(priceID) == 0 {
+		return nil, errors.New("priceID is empty")
+	}
+
+	return a.session.get("/api/v1/otc/price/" + priceID)
+}
+
+// OTCClosePrice make a deal with the price.
+func (a *App) OTCClosePrice(priceID string) (*Result, error) {
+	if len(priceID) == 0 {
+		return nil, errors.New("priceID is empty")
+	}
+
+	return a.session.get("/api/v1/otc/price/" + priceID + "/close")
+}
+
+// OTCTerminatePrice reject the price.
+func (a *App) OTCTerminatePrice(priceID string) (*Result, error) {
+	if len(priceID) == 0 {
+		return nil, errors.New("priceID is empty")
+	}
+
+	return a.session.get("/api/v1/otc/price/" + priceID + "/terminate")
 }
 
 // OTCGetPriceByCustomID get the latest status of price.

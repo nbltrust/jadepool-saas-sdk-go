@@ -84,6 +84,38 @@ func (session *session) post(path string, params params) (*Result, error) {
 	return &result, err
 }
 
+func (session *session) delete(path string) (*Result, error) {
+	return session.deleteWithParams(path, map[string]interface{}{})
+}
+
+func (session *session) deleteWithParams(path string, params params) (*Result, error) {
+	url := session.getURL(path)
+	err := session.prepareParams(params)
+	if err != nil {
+		return nil, err
+	}
+
+	r, err := req.Delete(url, session.commonHeaders(), req.QueryParam(params))
+	if err != nil {
+		return nil, err
+	}
+	if r.Response().StatusCode != 200 {
+		return nil, fmt.Errorf("http error code:%d", r.Response().StatusCode)
+	}
+
+	var result Result
+	err = r.ToJSON(&result)
+	if err != nil {
+		return nil, fmt.Errorf("parse body to json failed: %w", err)
+	}
+
+	if err = result.error(session.client.getSecret()); err != nil {
+		return nil, err
+	}
+
+	return &result, err
+}
+
 func (session *session) getURL(path string) string {
 	return fmt.Sprintf("%s%s", session.client.getAddr(), path)
 }

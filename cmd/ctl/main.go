@@ -139,6 +139,25 @@ func runCommand(arguments docopt.Opts) (*sdk.Result, error) {
 		}
 		return getApp(addr, key, secret).OTCSetSymbols(symbols)
 
+	case "OTCGetSymbols":
+		return getApp(addr, key, secret).OTCGetSymbols()
+
+	case "OTCDeleteSymbol":
+		if len(params) != 2 {
+			return nil, errors.New("invalid params")
+		}
+
+		base, err := strconv.ParseUint(params[0], 10, 64)
+		if err != nil {
+			return nil, errors.New("invalid params")
+		}
+		quote, err := strconv.ParseUint(params[1], 10, 64)
+		if err != nil {
+			return nil, errors.New("invalid params")
+		}
+
+		return getApp(addr, key, secret).OTCDeleteSymbol(uint(base), uint(quote))
+
 	case "OTCGetOrders":
 		return getApp(addr, key, secret).OTCGetOrders()
 
@@ -164,6 +183,25 @@ func runCommand(arguments docopt.Opts) (*sdk.Result, error) {
 
 		return getApp(addr, key, secret).OTCFeedPrice(params[0], params[1], params[2], invalidAt)
 
+	case "OTCGetPrice":
+		if len(params) != 1 {
+			return nil, errors.New("invalid params")
+		}
+
+		return getApp(addr, key, secret).OTCGetPrice(params[0])
+
+	case "OTCClosePrice":
+		if len(params) != 1 {
+			return nil, errors.New("invalid params")
+		}
+
+		return getApp(addr, key, secret).OTCClosePrice(params[0])
+	case "OTCTerminatePrice":
+		if len(params) != 1 {
+			return nil, errors.New("invalid params")
+		}
+
+		return getApp(addr, key, secret).OTCTerminatePrice(params[0])
 	case "OTCGetPriceByCustomID":
 		if len(params) != 1 {
 			return nil, errors.New("invalid params")
@@ -183,7 +221,6 @@ func runCommand(arguments docopt.Opts) (*sdk.Result, error) {
 		}
 
 		return getApp(addr, key, secret).OTCTerminatePriceByCustomID(params[0])
-		
 	case "SystemGetTime":
 		return getApp(addr, key, secret).SystemGetTime()
 	default:
