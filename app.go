@@ -47,7 +47,7 @@ func (a *App) VerifyAddress(coinType, address string) (*Result, error) {
 
 // GetAssets fetch all assets in the wallet.
 func (a *App) GetAssets() (*Result, error) {
-	return a.session.get("/api/v2/app/assets")
+	return a.session.get("/api/v1/app/assetsWithID")
 }
 
 // GetBalance get the balance for specified coin.
