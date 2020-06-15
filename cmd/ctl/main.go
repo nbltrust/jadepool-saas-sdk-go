@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	"github.com/docopt/docopt-go"
-	sdk "github.com/nbltrust/jadepool-saas-sdk-go"
+	sdk "github.com/nbltrust/hashkey-custody-sdk-go"
 )
 
 func runCommand(arguments docopt.Opts) (*sdk.Result, error) {
