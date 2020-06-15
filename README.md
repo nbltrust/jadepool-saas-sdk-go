@@ -1,4 +1,4 @@
-# saas golang sdk
+# hashkey custody golang sdk
 
 ## Usage
 ### Quick start
