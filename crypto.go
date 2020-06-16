@@ -2,8 +2,11 @@ package jadepoolsaas
 
 import (
 	"bytes"
+	"crypto/aes"
+	"crypto/cipher"
 	"crypto/hmac"
 	"crypto/sha256"
+	"encoding/base64"
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
@@ -99,4 +102,63 @@ func buildMsg(val interface{}, keyValSeparator, groupSeparator string) string {
 	}
 
 	return msg
+}
+
+func aesEncryptStr(src string, key, iv []byte) (encmess string, err error) {
+	ciphertext, err := aesEncrypt([]byte(src), key, iv)
+	if err != nil {
+		return
+	}
+
+	encmess = base64.StdEncoding.EncodeToString(ciphertext)
+	return
+}
+
+func aesEncrypt(src []byte, key []byte, iv []byte) ([]byte, error) {
+	if len(iv) == 0 {
+		iv = key[:16]
+	}
+	block, err := aes.NewCipher(key)
+	if err != nil {
+		return nil, err
+	}
+	src = padding(src, block.BlockSize())
+	blockMode := cipher.NewCBCEncrypter(block, iv)
+	blockMode.CryptBlocks(src, src)
+	return src, nil
+}
+
+func padding(src []byte, blockSize int) []byte {
+	padNum := blockSize - len(src)%blockSize
+	pad := bytes.Repeat([]byte{byte(padNum)}, padNum)
+	return append(src, pad...)
+}
+
+func aesDecryptStr(src string, key, iv []byte) (string, error) {
+	bsrc, err := base64.StdEncoding.DecodeString(src)
+	bret, err := aesDecrypt(bsrc, key, iv)
+	if err != nil {
+		return "", err
+	}
+	return string(bret), nil
+}
+
+func aesDecrypt(src []byte, key []byte, iv []byte) ([]byte, error) {
+	if len(iv) == 0 {
+		iv = key[:16]
+	}
+	block, err := aes.NewCipher(key)
+	if err != nil {
+		return nil, err
+	}
+	blockMode := cipher.NewCBCDecrypter(block, iv)
+	blockMode.CryptBlocks(src, src)
+	src = unpadding(src)
+	return src, nil
+}
+
+func unpadding(src []byte) []byte {
+	n := len(src)
+	unPadNum := int(src[n-1])
+	return src[:n-unPadNum]
 }

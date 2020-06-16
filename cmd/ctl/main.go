@@ -34,13 +34,42 @@ func runCommand(arguments docopt.Opts) (*sdk.Result, error) {
 			return nil, errors.New("invalid params")
 		}
 		return getApp(addr, key, secret).VerifyAddress(params[0], params[1])
+	case "GetAddress":
+		if len(params) != 1 {
+			return nil, errors.New("invalid params")
+		}
+		return getApp(addr, key, secret).GetAddress(params[0])
+	case "GetAllAssets":
+		return getApp(addr, key, secret).GetAllAssets()
 	case "GetAssets":
 		return getApp(addr, key, secret).GetAssets()
+	case "AddAsset":
+		if len(params) != 1 {
+			return nil, errors.New("invalid params")
+		}
+		return getApp(addr, key, secret).AddAsset(params[0])
+	case "GetBalances":
+		return getApp(addr, key, secret).GetBalances()
 	case "GetBalance":
 		if len(params) != 1 {
 			return nil, errors.New("invalid params")
 		}
 		return getApp(addr, key, secret).GetBalance(params[0])
+
+	case "GetOrders":
+		if len(params) != 2 {
+			return nil, errors.New("invalid params")
+		}
+		page, err := strconv.Atoi(params[0])
+		if err != nil {
+			return nil, errors.New("invalid params")
+		}
+		amount, err := strconv.Atoi(params[1])
+		if err != nil {
+			return nil, errors.New("invalid params")
+		}
+
+		return getApp(addr, key, secret).GetOrders(page, amount)
 	case "GetOrder":
 		if len(params) != 1 {
 			return nil, errors.New("invalid params")
@@ -126,6 +155,36 @@ func runCommand(arguments docopt.Opts) (*sdk.Result, error) {
 		}
 
 		return getCompany(addr, key, secret).FilterFundingRecords(page, amount, params[2], params[3], params[4], params[5], params[6], params[7])
+
+	case "CreateWallet":
+		if len(params) != 3 {
+			return nil, errors.New("invalid params")
+		}
+
+		return getCompany(addr, key, secret).CreateWallet(params[0], params[1], params[2])
+
+	case "GetWalletKeys":
+		if len(params) != 1 {
+			return nil, errors.New("invalid params")
+		}
+
+		return getCompany(addr, key, secret).GetWalletKeys(params[0])
+
+	case "UpdateWalletKey":
+		if len(params) != 2 {
+			return nil, errors.New("invalid params")
+		}
+
+		var enable bool
+		if params[1] == "true" {
+			enable = true
+		} else if params[1] == "false" {
+			enable = false
+		} else {
+			return nil, errors.New("invalid params")
+		}
+
+		return getCompany(addr, key, secret).UpdateWalletKey(params[0], enable)
 
 	case "OTCSetSymbols":
 		if len(params) != 1 {
@@ -223,6 +282,12 @@ func runCommand(arguments docopt.Opts) (*sdk.Result, error) {
 		return getApp(addr, key, secret).OTCTerminatePriceByCustomID(params[0])
 	case "SystemGetTime":
 		return getApp(addr, key, secret).SystemGetTime()
+	case "GetMarket":
+		if len(params) != 1 {
+			return nil, errors.New("invalid params")
+		}
+
+		return getApp(addr, key, secret).GetMarket(params[0])
 	default:
 		return nil, errors.New("unknown action: " + action)
 	}

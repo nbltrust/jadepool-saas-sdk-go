@@ -46,7 +46,7 @@ func (session *session) getWithParams(path string, params params) (*Result, erro
 	var result Result
 	err = r.ToJSON(&result)
 	if err != nil {
-		return nil, fmt.Errorf("parse body to json failed: %w", err)
+		return nil, fmt.Errorf("parse body to json failed: %v", err)
 	}
 
 	if err = result.error(session.client.getSecret()); err != nil {
@@ -74,7 +74,35 @@ func (session *session) post(path string, params params) (*Result, error) {
 	var result Result
 	err = r.ToJSON(&result)
 	if err != nil {
-		return nil, fmt.Errorf("parse body to json failed: %w", err)
+		return nil, fmt.Errorf("parse body to json failed: %v", err)
+	}
+
+	if err = result.error(session.client.getSecret()); err != nil {
+		return nil, err
+	}
+
+	return &result, err
+}
+
+func (session *session) put(path string, params params) (*Result, error) {
+	url := session.getURL(path)
+	err := session.prepareParams(params)
+	if err != nil {
+		return nil, err
+	}
+
+	r, err := req.Put(url, session.commonHeaders(), req.BodyJSON(&params))
+	if err != nil {
+		return nil, err
+	}
+	if r.Response().StatusCode != 200 {
+		return nil, fmt.Errorf("http error code:%d", r.Response().StatusCode)
+	}
+
+	var result Result
+	err = r.ToJSON(&result)
+	if err != nil {
+		return nil, fmt.Errorf("parse body to json failed: %v", err)
 	}
 
 	if err = result.error(session.client.getSecret()); err != nil {
@@ -106,7 +134,7 @@ func (session *session) deleteWithParams(path string, params params) (*Result, e
 	var result Result
 	err = r.ToJSON(&result)
 	if err != nil {
-		return nil, fmt.Errorf("parse body to json failed: %w", err)
+		return nil, fmt.Errorf("parse body to json failed: %v", err)
 	}
 
 	if err = result.error(session.client.getSecret()); err != nil {

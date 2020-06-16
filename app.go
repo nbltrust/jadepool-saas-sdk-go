@@ -45,9 +45,35 @@ func (a *App) VerifyAddress(coinType, address string) (*Result, error) {
 	})
 }
 
+// GetAddress request an address, create if not exist.
+func (a *App) GetAddress(coinType string) (*Result, error) {
+	if len(coinType) == 0 {
+		return nil, errors.New("coinType or address is empty")
+	}
+
+	return a.session.get("/api/v1/address/" + coinType)
+}
+
+// GetAllAssets fetch all available assets in the wallet.
+func (a *App) GetAllAssets() (*Result, error) {
+	return a.session.get("/api/v1/app/allAssets")
+}
+
 // GetAssets fetch all assets in the wallet.
 func (a *App) GetAssets() (*Result, error) {
 	return a.session.get("/api/v1/app/assetsWithID")
+}
+
+// AddAsset add asset into the wallet.
+func (a *App) AddAsset(coinName string) (*Result, error) {
+	return a.session.post("/api/v1/app/assets", map[string]interface{}{
+		"coinNames": []string{coinName},
+	})
+}
+
+// GetBalances fetch all asset balances in the wallet.
+func (a *App) GetBalances() (*Result, error) {
+	return a.session.get("/api/v1/app/balances")
 }
 
 // GetBalance get the balance for specified coin.
@@ -57,6 +83,14 @@ func (a *App) GetBalance(coinType string) (*Result, error) {
 	}
 
 	return a.session.get("/api/v1/app/balance/" + coinType)
+}
+
+// GetOrders get orders in the wallet.
+func (a *App) GetOrders(page, amount int) (*Result, error) {
+	return a.session.getWithParams("/api/v1/app/orders", map[string]interface{}{
+		"page":   page,
+		"amount": amount,
+	})
 }
 
 // GetOrder get order by id.
@@ -159,8 +193,8 @@ func (a *App) OTCGetSymbols() (*Result, error) {
 // OTCDeleteSymbol delete otc symbol.
 func (a *App) OTCDeleteSymbol(baseCoinID, quoteCoinID uint) (*Result, error) {
 	return a.session.deleteWithParams("/api/v1/otc/symbol", map[string]interface{}{
-		"baseCoinID":     baseCoinID,
-		"quoteCoinID":        quoteCoinID,
+		"baseCoinID":  baseCoinID,
+		"quoteCoinID": quoteCoinID,
 	})
 }
 
@@ -181,9 +215,9 @@ func (a *App) OTCGetOrder(orderID string) (*Result, error) {
 
 // OTCFeedPrice feed otc price.
 func (a *App) OTCFeedPrice(orderID, price, customID string, invalidAt int64) (*Result, error) {
-	return a.session.post("/api/v1/otc/orders/" + orderID + "/price", map[string]interface{}{
-		"price": price,
-		"customID": customID,
+	return a.session.post("/api/v1/otc/orders/"+orderID+"/price", map[string]interface{}{
+		"price":     price,
+		"customID":  customID,
 		"invalidAt": invalidAt,
 	})
 }
@@ -245,6 +279,11 @@ func (a *App) OTCTerminatePriceByCustomID(customID string) (*Result, error) {
 // SystemGetTime get the system timestamp.
 func (a *App) SystemGetTime() (*Result, error) {
 	return a.session.get("/api/v1/system/time")
+}
+
+// GetMarket get the system timestamp.
+func (a *App) GetMarket(coinType string) (*Result, error) {
+	return a.session.get("/api/v1/market/" + coinType)
 }
 
 // App represent a wallet.

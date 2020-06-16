@@ -1,6 +1,11 @@
 package jadepoolsaas
 
-import "errors"
+import (
+	"crypto/md5"
+	"encoding/base64"
+	"errors"
+	"math/rand"
+)
 
 // NewCompany creates a new company with key and secret.
 func NewCompany(key, secret string) *Company {
@@ -70,6 +75,81 @@ func (c *Company) FilterFundingRecords(page, amount int, sort, coins, froms, toe
 		"toes":    toes,
 		"type":    coinType,
 		"orderBy": orderBy,
+	})
+}
+
+// CreateWallet create wallet.
+func (c *Company) CreateWallet(name, password, webHook string) (*Result, error) {
+	if len(name) == 0 || len(password) == 0 {
+		return nil, errors.New("name or password is empty")
+	}
+
+	aesIV := make([]byte, 16)
+	rand.Read(aesIV)
+	hasher := md5.New()
+	hasher.Write([]byte(c.Secret))
+	mkey := hasher.Sum(nil)
+	encryptPassword, err := aesEncryptStr(password, mkey, aesIV)
+	if err != nil {
+		return nil, err
+	}
+
+	ret, err := c.session.post("/api/v1/app", map[string]interface{}{
+		"name":     name,
+		"password": encryptPassword,
+		"webHook":  webHook,
+		"aesIV":    base64.StdEncoding.EncodeToString(aesIV),
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	appSecret, err := aesDecryptStr(ret.Data["encryptedAppSecret"].(string), mkey, aesIV)
+	if err != nil {
+		return ret, err
+	}
+	ret.Data["appSecret"] = appSecret
+	return ret, nil
+}
+
+// GetWalletKeys get all keys for the specified wallet.
+func (c *Company) GetWalletKeys(walletID string) (*Result, error) {
+	if len(walletID) == 0 {
+		return nil, errors.New("walletID is empty")
+	}
+
+	aesIV := make([]byte, 16)
+	rand.Read(aesIV)
+	hasher := md5.New()
+	hasher.Write([]byte(c.Secret))
+	mkey := hasher.Sum(nil)
+
+	ret, err := c.session.getWithParams("/api/v1/app/"+walletID+"/keys", map[string]interface{}{
+		"aesIV": base64.StdEncoding.EncodeToString(aesIV),
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	for _, key := range ret.Data["keys"].([]interface{}) {
+		keymap := key.(map[string]interface{})
+		appSecret, err := aesDecryptStr(keymap["encryptedAppSecret"].(string), mkey, aesIV)
+		if err != nil {
+			return ret, err
+		}
+		keymap["appSecret"] = appSecret
+	}
+	return ret, nil
+}
+
+// UpdateWalletKey update app key attributes.
+func (c *Company) UpdateWalletKey(appKey string, enable bool) (*Result, error) {
+	if len(appKey) == 0 {
+		return nil, errors.New("walletID is empty")
+	}
+
+	return c.session.put("/api/v1/appKey/"+appKey, map[string]interface{}{
+		"enable": enable,
 	})
 }
 
