@@ -1,4 +1,4 @@
-# saas golang sdk
+# hashkey custody golang sdk
 
 ## Usage
 ### Quick start
@@ -9,7 +9,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	sdk "github.com/nbltrust/jadepool-saas-sdk-go"
+	sdk "github.com/nbltrust/hashkey-custody-sdk-go"
 )
 
 func main() {
