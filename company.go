@@ -1,7 +1,7 @@
 package jadepoolsaas
 
 import (
-	"crypto/md5"
+	"crypto/sha256"
 	"encoding/base64"
 	"errors"
 	"math/rand"
@@ -86,10 +86,8 @@ func (c *Company) CreateWallet(name, password, webHook string) (*Result, error) 
 
 	aesIV := make([]byte, 16)
 	rand.Read(aesIV)
-	hasher := md5.New()
-	hasher.Write([]byte(c.Secret))
-	mkey := hasher.Sum(nil)
-	encryptPassword, err := aesEncryptStr(password, mkey, aesIV)
+	mkey := sha256.Sum256([]byte(c.Secret))
+	encryptPassword, err := aesEncryptStr(password, mkey[:], aesIV)
 	if err != nil {
 		return nil, err
 	}
@@ -104,7 +102,7 @@ func (c *Company) CreateWallet(name, password, webHook string) (*Result, error) 
 		return nil, err
 	}
 
-	appSecret, err := aesDecryptStr(ret.Data["encryptedAppSecret"].(string), mkey, aesIV)
+	appSecret, err := aesDecryptStr(ret.Data["encryptedAppSecret"].(string), mkey[:], aesIV)
 	if err != nil {
 		return ret, err
 	}
@@ -120,9 +118,7 @@ func (c *Company) GetWalletKeys(walletID string) (*Result, error) {
 
 	aesIV := make([]byte, 16)
 	rand.Read(aesIV)
-	hasher := md5.New()
-	hasher.Write([]byte(c.Secret))
-	mkey := hasher.Sum(nil)
+	mkey := sha256.Sum256([]byte(c.Secret))
 
 	ret, err := c.session.getWithParams("/api/v1/app/"+walletID+"/keys", map[string]interface{}{
 		"aesIV": base64.StdEncoding.EncodeToString(aesIV),
@@ -133,7 +129,7 @@ func (c *Company) GetWalletKeys(walletID string) (*Result, error) {
 
 	for _, key := range ret.Data["keys"].([]interface{}) {
 		keymap := key.(map[string]interface{})
-		appSecret, err := aesDecryptStr(keymap["encryptedAppSecret"].(string), mkey, aesIV)
+		appSecret, err := aesDecryptStr(keymap["encryptedAppSecret"].(string), mkey[:], aesIV)
 		if err != nil {
 			return ret, err
 		}
