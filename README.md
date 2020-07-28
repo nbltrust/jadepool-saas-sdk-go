@@ -1,17 +1,6 @@
-# hashkey custody golang sdk
-
 ## Usage
 ### Quick start
 ```go
-package main
-
-import (
-	"encoding/json"
-	"fmt"
-
-	sdk "github.com/nbltrust/hashkey-custody-sdk-go"
-)
-
 func main() {
 	app := sdk.NewApp("appkey", "appsecret")
 	// specified server addr
