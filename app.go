@@ -102,6 +102,13 @@ func (a *App) GetOrder(id string) (*Result, error) {
 	return a.session.get("/api/v1/app/order/" + id)
 }
 
+// UpdateOrder update order's note.
+func (a *App) UpdateOrder(id string, note string) (*Result, error) {
+	return a.session.put("/api/v1/app/order/" + id, map[string]interface{}{
+		"note": note,
+	})
+}
+
 // Withdraw request withdrawal.
 func (a *App) Withdraw(id, coinType, to, value string) (*Result, error) {
 	return a.WithdrawWithMemo(id, coinType, to, value, "")
@@ -118,6 +125,20 @@ func (a *App) WithdrawWithMemo(id, coinType, to, value, memo string) (*Result, e
 		"value": value,
 		"memo":  memo,
 		"id":    id,
+	})
+}
+
+// Transfer transfer the funding to the specified wallet.
+func (a *App) Transfer(to, coinType, value string) (*Result, error) {
+	if len(coinType) == 0 || len(to) == 0 || len(value) == 0 {
+		return nil, errors.New("coinType or to or value is empty")
+	}
+
+	return a.session.post("/api/v1/app/"+coinType+"/transfer", map[string]interface{}{
+		"to":    to,
+		"value": value,
+		"note":    "",
+		"message": "",
 	})
 }
 

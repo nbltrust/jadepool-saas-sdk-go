@@ -75,6 +75,11 @@ func runCommand(arguments docopt.Opts) (*sdk.Result, error) {
 			return nil, errors.New("invalid params")
 		}
 		return getApp(addr, key, secret).GetOrder(params[0])
+	case "UpdateOrder":
+		if len(params) != 2 {
+			return nil, errors.New("invalid params")
+		}
+		return getApp(addr, key, secret).UpdateOrder(params[0], params[1])
 	case "Withdraw":
 		if len(params) != 4 {
 			return nil, errors.New("invalid params")
@@ -85,6 +90,11 @@ func runCommand(arguments docopt.Opts) (*sdk.Result, error) {
 			return nil, errors.New("invalid params")
 		}
 		return getApp(addr, key, secret).WithdrawWithMemo(params[0], params[1], params[2], params[3], params[4])
+	case "Transfer":
+		if len(params) != 3 {
+			return nil, errors.New("invalid params")
+		}
+		return getApp(addr, key, secret).Transfer(params[0], params[1], params[2])
 	case "Delegate":
 		if len(params) != 3 {
 			return nil, errors.New("invalid params")
