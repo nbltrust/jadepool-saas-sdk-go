@@ -298,6 +298,18 @@ func runCommand(arguments docopt.Opts) (*sdk.Result, error) {
 		}
 
 		return getApp(addr, key, secret).GetMarket(params[0])
+	case "KYCFileUpload":
+		if len(params) != 1 {
+			return nil, errors.New("invalid params")
+		}
+
+		return getKYC(addr, key, secret).FileUpload(params[0])
+	case "KYCFileGet":
+		if len(params) != 2 {
+			return nil, errors.New("invalid params")
+		}
+
+		return getKYC(addr, key, secret).FileGet(params[0], params[1])
 	default:
 		return nil, errors.New("unknown action: " + action)
 	}
@@ -315,6 +327,10 @@ func getCompany(addr, key, secret string) *sdk.Company {
 		return sdk.NewCompanyWithAddr(addr, key, secret)
 	}
 	return sdk.NewCompany(key, secret)
+}
+
+func getKYC(addr, key, secret string) *sdk.KYC {
+	return sdk.NewKYCWithAddr(addr, key, secret)
 }
 
 func main() {

@@ -56,6 +56,35 @@ func (session *session) getWithParams(path string, params params) (*Result, erro
 	return &result, err
 }
 
+func (session *session) getFile(path string, filePath string) (*Result, error) {
+	params := params{}
+
+	url := session.getURL(path)
+	err := session.prepareParams(params)
+	if err != nil {
+		return nil, err
+	}
+
+	r, err := req.Get(url, session.commonHeaders(), req.Param(params))
+	if err != nil {
+		return nil, err
+	}
+	if r.Response().StatusCode != 200 {
+		return nil, fmt.Errorf("http error code:%d", r.Response().StatusCode)
+	}
+
+	err = r.ToFile(filePath)
+	if err != nil {
+		return nil, err
+	}
+
+	var result Result
+	result.Data = map[string]interface{}{
+		"filePath": filePath,
+	}
+	return &result, err
+}
+
 func (session *session) post(path string, params params) (*Result, error) {
 	url := session.getURL(path)
 	err := session.prepareParams(params)
@@ -64,6 +93,36 @@ func (session *session) post(path string, params params) (*Result, error) {
 	}
 
 	r, err := req.Post(url, session.commonHeaders(), req.BodyJSON(&params))
+	if err != nil {
+		return nil, err
+	}
+	if r.Response().StatusCode != 200 {
+		return nil, fmt.Errorf("http error code:%d", r.Response().StatusCode)
+	}
+
+	var result Result
+	err = r.ToJSON(&result)
+	if err != nil {
+		return nil, fmt.Errorf("parse body to json failed: %v", err)
+	}
+
+	if err = result.error(session.client.getSecret()); err != nil {
+		return nil, err
+	}
+
+	return &result, err
+}
+
+func (session *session) postFile(path string, filePath string) (*Result, error) {
+	params := params{}
+
+	url := session.getURL(path)
+	err := session.prepareParams(params)
+	if err != nil {
+		return nil, err
+	}
+
+	r, err := req.Post(url, session.commonHeaders(), req.File(filePath), req.Param(params))
 	if err != nil {
 		return nil, err
 	}
