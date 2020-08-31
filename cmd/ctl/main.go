@@ -310,6 +310,30 @@ func runCommand(arguments docopt.Opts) (*sdk.Result, error) {
 		}
 
 		return getKYC(addr, key, secret).FileGet(params[0], params[1])
+	case "KYCApplicationCreate":
+		if len(params) != 2 {
+			return nil, errors.New("invalid params")
+		}
+
+		return getKYC(addr, key, secret).ApplicationCreate(params[0], params[1])
+	case "KYCApplicationUpdate":
+		if len(params) != 3 {
+			return nil, errors.New("invalid params")
+		}
+
+		return getKYC(addr, key, secret).ApplicationUpdate(params[0], params[1], params[2])
+	case "KYCApplicationGet":
+		if len(params) != 1 {
+			return nil, errors.New("invalid params")
+		}
+
+		return getKYC(addr, key, secret).ApplicationGet(params[0])
+	case "KYCApplicationSubmit":
+		if len(params) != 1 {
+			return nil, errors.New("invalid params")
+		}
+
+		return getKYC(addr, key, secret).ApplicationSubmit(params[0])
 	default:
 		return nil, errors.New("unknown action: " + action)
 	}

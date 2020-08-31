@@ -113,6 +113,34 @@ func (session *session) post(path string, params params) (*Result, error) {
 	return &result, err
 }
 
+func (session *session) patch(path string, params params) (*Result, error) {
+	url := session.getURL(path)
+	err := session.prepareParams(params)
+	if err != nil {
+		return nil, err
+	}
+
+	r, err := req.Patch(url, session.commonHeaders(), req.BodyJSON(&params))
+	if err != nil {
+		return nil, err
+	}
+	if r.Response().StatusCode != 200 {
+		return nil, fmt.Errorf("http error code:%d", r.Response().StatusCode)
+	}
+
+	var result Result
+	err = r.ToJSON(&result)
+	if err != nil {
+		return nil, fmt.Errorf("parse body to json failed: %v", err)
+	}
+
+	if err = result.error(session.client.getSecret()); err != nil {
+		return nil, err
+	}
+
+	return &result, err
+}
+
 func (session *session) postFile(path string, filePath string) (*Result, error) {
 	params := params{}
 
