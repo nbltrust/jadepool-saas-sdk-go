@@ -36,6 +36,11 @@ func (k *KYC) ApplicationUpdate(applicationID, key, value string) (*Result, erro
 	})
 }
 
+// ApplicationUpdate2 update the application.
+func (k *KYC) ApplicationUpdate2(applicationID string, content map[string]interface{}) (*Result, error) {
+	return k.session.patch("/api/v1/application/" + applicationID, content)
+}
+
 // ApplicationGet get the application.
 func (k *KYC) ApplicationGet(applicationID string) (*Result, error) {
 	return k.session.get("/api/v1/application/" + applicationID)
