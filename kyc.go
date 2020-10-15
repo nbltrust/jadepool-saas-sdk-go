@@ -1,6 +1,9 @@
 package jadepoolsaas
 
-import "bytes"
+import (
+	"bytes"
+	"github.com/imroc/req"
+)
 
 // NewKYCWithAddr creates a new kyc instance with server addr, key and secret.
 func NewKYCWithAddr(addr, appKey, appSecret string) *KYC {
@@ -29,7 +32,7 @@ func (k *KYC) FileGet(fileID, filePath string) (*Result, error) {
 }
 
 // FileGet2 get file.
-func (k *KYC) FileGet2(fileID string) ([]byte, error) {
+func (k *KYC) FileGet2(fileID string) (*req.Resp, error) {
 	return k.session.getFile2("/api/v1/file/" + fileID)
 }
 

@@ -87,7 +87,7 @@ func (session *session) getFile(path string, filePath string) (*Result, error) {
 	return &result, err
 }
 
-func (session *session) getFile2(path string) ([]byte, error) {
+func (session *session) getFile2(path string) (*req.Resp, error) {
 	params := params{}
 
 	url := session.getURL(path)
@@ -104,7 +104,7 @@ func (session *session) getFile2(path string) ([]byte, error) {
 		return nil, fmt.Errorf("http error code:%d", r.Response().StatusCode)
 	}
 
-	return r.ToBytes()
+	return r, nil
 }
 
 func (session *session) post(path string, params params) (*Result, error) {
