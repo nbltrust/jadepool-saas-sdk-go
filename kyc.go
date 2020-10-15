@@ -1,5 +1,7 @@
 package jadepoolsaas
 
+import "bytes"
+
 // NewKYCWithAddr creates a new kyc instance with server addr, key and secret.
 func NewKYCWithAddr(addr, appKey, appSecret string) *KYC {
 	a := &KYC{
@@ -16,9 +18,19 @@ func (k *KYC) FileUpload(filePath string) (*Result, error) {
 	return k.session.postFile("/api/v1/file", filePath)
 }
 
+// FileUpload2 upload file.
+func (k *KYC) FileUpload2(fileName string, file *bytes.Reader) (*Result, error) {
+	return k.session.postFile2("/api/v1/file", fileName, file)
+}
+
 // FileGet get file.
 func (k *KYC) FileGet(fileID, filePath string) (*Result, error) {
 	return k.session.getFile("/api/v1/file/" + fileID, filePath)
+}
+
+// FileGet2 get file.
+func (k *KYC) FileGet2(fileID string) ([]byte, error) {
+	return k.session.getFile2("/api/v1/file/" + fileID)
 }
 
 // ApplicationCreate create an application.
