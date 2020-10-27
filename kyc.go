@@ -57,8 +57,10 @@ func (k *KYC) ApplicationUpdate2(applicationID string, content map[string]interf
 }
 
 // ApplicationGet get the application.
-func (k *KYC) ApplicationGet(applicationID string) (*Result, error) {
-	return k.session.get("/api/v1/application/" + applicationID)
+func (k *KYC) ApplicationGet(applicationID string, expand bool) (*Result, error) {
+	return k.session.getWithParams("/api/v1/application/" + applicationID, map[string]interface{}{
+		"expand": expand,
+	})
 }
 
 // ApplicationSubmit submit the application.
