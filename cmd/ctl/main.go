@@ -327,7 +327,7 @@ func runCommand(arguments docopt.Opts) (*sdk.Result, error) {
 			return nil, errors.New("invalid params")
 		}
 
-		return getKYC(addr, key, secret).ApplicationGet(params[0])
+		return getKYC(addr, key, secret).ApplicationGet(params[0], false)
 	case "KYCApplicationSubmit":
 		if len(params) != 1 {
 			return nil, errors.New("invalid params")
