@@ -315,7 +315,7 @@ func runCommand(arguments docopt.Opts) (*sdk.Result, error) {
 			return nil, errors.New("invalid params")
 		}
 
-		return getKYC(addr, key, secret).ApplicationCreate(params[0], params[1])
+		return getKYC(addr, key, secret).ApplicationCreate(params[0], params[1], "demo")
 	case "KYCApplicationUpdate":
 		if len(params) != 3 {
 			return nil, errors.New("invalid params")

@@ -37,10 +37,11 @@ func (k *KYC) FileGet2(fileID string) (*req.Resp, error) {
 }
 
 // ApplicationCreate create an application.
-func (k *KYC) ApplicationCreate(mType, identifier string) (*Result, error) {
+func (k *KYC) ApplicationCreate(mType, identifier, operator string) (*Result, error) {
 	return k.session.post("/api/v1/application", map[string]interface{}{
 		"type": mType,
 		"identifier": identifier,
+		"operator": operator,
 	})
 }
 
