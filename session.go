@@ -52,7 +52,7 @@ func (session *session) getWithParams(path string, params params) (*Result, erro
 	}
 
 	if err = result.error(session.client.getSecret()); err != nil {
-		return nil, err
+		return &result, err
 	}
 
 	return &result, err
