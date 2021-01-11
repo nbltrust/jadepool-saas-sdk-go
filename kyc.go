@@ -64,6 +64,13 @@ func (k *KYC) ApplicationGet(applicationID string, expand bool) (*Result, error)
 	})
 }
 
+// ApplicationGetByIdentifier get the application.
+func (k *KYC) ApplicationGetByIdentifier(mType, identifier string, expand bool) (*Result, error) {
+	return k.session.getWithParams("/api/v1/application/identifier/" + mType + "/" + identifier, map[string]interface{}{
+		"expand": expand,
+	})
+}
+
 // ApplicationSubmit submit the application.
 func (k *KYC) ApplicationSubmit(applicationID string) (*Result, error) {
 	ret, err := k.session.get("/api/v1/application/" + applicationID)
