@@ -64,6 +64,11 @@ func (a *App) GetAssets() (*Result, error) {
 	return a.session.get("/api/v1/app/assetsWithID")
 }
 
+// GetAppInfo get the wallet's attributes.
+func (a *App) GetAppInfo() (*Result, error) {
+	return a.session.get("/api/v1/app/info")
+}
+
 // AddAsset add asset into the wallet.
 func (a *App) AddAsset(coinName string) (*Result, error) {
 	return a.session.post("/api/v1/app/assets", map[string]interface{}{

@@ -138,6 +138,14 @@ func (c *Company) GetWalletKeys(walletID string) (*Result, error) {
 	return ret, nil
 }
 
+// GetWalletInfo get attributes for the specified wallet.
+func (c *Company) GetWalletInfo(walletID string) (*Result, error) {
+	if len(walletID) == 0 {
+		return nil, errors.New("walletID is empty")
+	}
+	return c.session.get("/api/v1/app/"+walletID+"/info")
+}
+
 // UpdateWalletKey update app key attributes.
 func (c *Company) UpdateWalletKey(appKey string, enable bool) (*Result, error) {
 	if len(appKey) == 0 {

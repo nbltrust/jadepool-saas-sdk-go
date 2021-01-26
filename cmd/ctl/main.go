@@ -43,6 +43,8 @@ func runCommand(arguments docopt.Opts) (*sdk.Result, error) {
 		return getApp(addr, key, secret).GetAllAssets()
 	case "GetAssets":
 		return getApp(addr, key, secret).GetAssets()
+	case "GetAppInfo":
+		return getApp(addr, key, secret).GetAppInfo()
 	case "AddAsset":
 		if len(params) != 1 {
 			return nil, errors.New("invalid params")
@@ -179,6 +181,13 @@ func runCommand(arguments docopt.Opts) (*sdk.Result, error) {
 		}
 
 		return getCompany(addr, key, secret).GetWalletKeys(params[0])
+
+	case "GetWalletInfo":
+		if len(params) != 1 {
+			return nil, errors.New("invalid params")
+		}
+
+		return getCompany(addr, key, secret).GetWalletInfo(params[0])
 
 	case "UpdateWalletKey":
 		if len(params) != 2 {
