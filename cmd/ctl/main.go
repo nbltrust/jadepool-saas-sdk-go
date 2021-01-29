@@ -34,6 +34,11 @@ func runCommand(arguments docopt.Opts) (*sdk.Result, error) {
 			return nil, errors.New("invalid params")
 		}
 		return getApp(addr, key, secret).VerifyAddress(params[0], params[1])
+	case "CheckAddress":
+		if len(params) != 2 {
+			return nil, errors.New("invalid params")
+		}
+		return getApp(addr, key, secret).CheckAddress(params[0], params[1])
 	case "GetAddress":
 		if len(params) != 1 {
 			return nil, errors.New("invalid params")

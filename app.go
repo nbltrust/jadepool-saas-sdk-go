@@ -45,6 +45,17 @@ func (a *App) VerifyAddress(coinType, address string) (*Result, error) {
 	})
 }
 
+// CheckAddress anti-money laundering check.
+func (a *App) CheckAddress(coinType, address string) (*Result, error) {
+	if len(coinType) == 0 || len(address) == 0 {
+		return nil, errors.New("coinType or address is empty")
+	}
+
+	return a.session.post("/api/v1/address/"+coinType+"/check", map[string]interface{}{
+		"address": address,
+	})
+}
+
 // GetAddress request an address, create if not exist.
 func (a *App) GetAddress(coinType string) (*Result, error) {
 	if len(coinType) == 0 {
