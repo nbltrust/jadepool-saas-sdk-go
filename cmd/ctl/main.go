@@ -194,6 +194,20 @@ func runCommand(arguments docopt.Opts) (*sdk.Result, error) {
 
 		return getCompany(addr, key, secret).GetWalletInfo(params[0])
 
+	case "Trade":
+		if len(params) != 5 {
+			return nil, errors.New("invalid params")
+		}
+
+		return getCompany(addr, key, secret).Trade(params[0], params[1], params[2], params[3], params[4])
+
+	case "GetTradeOrder":
+		if len(params) != 3 {
+			return nil, errors.New("invalid params")
+		}
+
+		return getCompany(addr, key, secret).GetTradeOrder(params[0], params[1], params[2])
+
 	case "UpdateWalletKey":
 		if len(params) != 2 {
 			return nil, errors.New("invalid params")
@@ -304,6 +318,8 @@ func runCommand(arguments docopt.Opts) (*sdk.Result, error) {
 		}
 
 		return getApp(addr, key, secret).OTCTerminatePriceByCustomID(params[0])
+	case "OTCCustomerGetSymbols":
+		return getCompany(addr, key, secret).OTCCustomerGetSymbols()
 	case "SystemGetTime":
 		return getApp(addr, key, secret).SystemGetTime()
 	case "GetMarket":

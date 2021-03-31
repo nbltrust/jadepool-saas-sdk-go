@@ -143,7 +143,30 @@ func (c *Company) GetWalletInfo(walletID string) (*Result, error) {
 	if len(walletID) == 0 {
 		return nil, errors.New("walletID is empty")
 	}
-	return c.session.get("/api/v1/app/"+walletID+"/info")
+	return c.session.get("/api/v1/app/" + walletID + "/info")
+}
+
+// Trade create a new trade order in the API wallet.
+func (c *Company) Trade(walletID, symbol, mType, side, amount string) (*Result, error) {
+	if len(walletID) == 0 {
+		return nil, errors.New("walletID is empty")
+	}
+	return c.session.post("/api/v1/app/"+walletID+"/trade", map[string]interface{}{
+		"symbol": symbol,
+		"type":   mType,
+		"side":   side,
+		"amount": amount,
+	})
+}
+
+// GetTradeOrder get trade order.
+func (c *Company) GetTradeOrder(walletID, symbol, tradeID string) (*Result, error) {
+	if len(walletID) == 0 {
+		return nil, errors.New("walletID is empty")
+	}
+	return c.session.getWithParams("/api/v1/app/"+walletID+"/trade/"+tradeID, map[string]interface{}{
+		"symbol": symbol,
+	})
 }
 
 // UpdateWalletKey update app key attributes.
@@ -155,6 +178,11 @@ func (c *Company) UpdateWalletKey(appKey string, enable bool) (*Result, error) {
 	return c.session.put("/api/v1/appKey/"+appKey, map[string]interface{}{
 		"enable": enable,
 	})
+}
+
+// OTCCustomerGetSymbols get all otc symbols
+func (c *Company) OTCCustomerGetSymbols() (*Result, error) {
+	return c.session.get("/api/v1/otc/customer/symbols")
 }
 
 // Company represent a company.
