@@ -195,11 +195,11 @@ func runCommand(arguments docopt.Opts) (*sdk.Result, error) {
 		return getCompany(addr, key, secret).GetWalletInfo(params[0])
 
 	case "Trade":
-		if len(params) != 5 {
+		if len(params) != 6 {
 			return nil, errors.New("invalid params")
 		}
 
-		return getCompany(addr, key, secret).Trade(params[0], params[1], params[2], params[3], params[4])
+		return getCompany(addr, key, secret).Trade(params[0], params[1], params[2], params[3], params[4], params[5])
 
 	case "GetTradeOrder":
 		if len(params) != 3 {

@@ -147,15 +147,16 @@ func (c *Company) GetWalletInfo(walletID string) (*Result, error) {
 }
 
 // Trade create a new trade order in the API wallet.
-func (c *Company) Trade(walletID, symbol, mType, side, amount string) (*Result, error) {
+func (c *Company) Trade(walletID, symbol, mType, side, amount, amountCoin string) (*Result, error) {
 	if len(walletID) == 0 {
 		return nil, errors.New("walletID is empty")
 	}
 	return c.session.post("/api/v1/app/"+walletID+"/trade", map[string]interface{}{
-		"symbol": symbol,
-		"type":   mType,
-		"side":   side,
-		"amount": amount,
+		"symbol":     symbol,
+		"type":       mType,
+		"side":       side,
+		"amount":     amount,
+		"amountCoin": amountCoin,
 	})
 }
 
