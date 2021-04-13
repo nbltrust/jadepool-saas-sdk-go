@@ -16,6 +16,11 @@ func NewKYCWithAddr(addr, appKey, appSecret string) *KYC {
 	return a
 }
 
+// GeneralSettingsGet get the general settings.
+func (k *KYC) GeneralSettingsGet() (*Result, error) {
+	return k.session.get("/api/v1/generalSettings")
+}
+
 // FileUpload upload file.
 func (k *KYC) FileUpload(filePath string) (*Result, error) {
 	return k.session.postFile("/api/v1/file", filePath)
