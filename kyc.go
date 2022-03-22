@@ -33,7 +33,7 @@ func (k *KYC) FileUpload2(fileName string, file *bytes.Reader) (*Result, error) 
 
 // FileGet get file.
 func (k *KYC) FileGet(fileID, filePath string) (*Result, error) {
-	return k.session.getFile("/api/v1/file/" + fileID, filePath)
+	return k.session.getFile("/api/v1/file/"+fileID, filePath)
 }
 
 // FileGet2 get file.
@@ -44,53 +44,48 @@ func (k *KYC) FileGet2(fileID string) (*req.Resp, error) {
 // ApplicationCreate create an application.
 func (k *KYC) ApplicationCreate(mType, identifier, operator string) (*Result, error) {
 	return k.session.post("/api/v1/application", map[string]interface{}{
-		"type": mType,
+		"type":       mType,
 		"identifier": identifier,
-		"operator": operator,
+		"operator":   operator,
 	})
 }
 
 // ApplicationUpdate update the application.
 func (k *KYC) ApplicationUpdate(applicationID, key, value string) (*Result, error) {
-	return k.session.patch("/api/v1/application/" + applicationID, map[string]interface{}{
+	return k.session.patch("/api/v1/application/"+applicationID, map[string]interface{}{
 		key: value,
 	})
 }
 
 // ApplicationUpdate2 update the application.
 func (k *KYC) ApplicationUpdate2(applicationID string, content map[string]interface{}) (*Result, error) {
-	return k.session.patch("/api/v1/application/" + applicationID, content)
+	return k.session.patch("/api/v1/application/"+applicationID, content)
 }
 
 // ApplicationGet get the application.
 func (k *KYC) ApplicationGet(applicationID string, expand bool) (*Result, error) {
-	return k.session.getWithParams("/api/v1/application/" + applicationID, map[string]interface{}{
+	return k.session.getWithParams("/api/v1/application/"+applicationID, map[string]interface{}{
 		"expand": expand,
 	})
 }
 
 // ApplicationJumioGet get the application's jumio info.
 func (k *KYC) ApplicationJumioGet(applicationID, locale string) (*Result, error) {
-	return k.session.getWithParams("/api/v1/application/" + applicationID + "/jumio", map[string]interface{}{
+	return k.session.getWithParams("/api/v1/application/"+applicationID+"/jumio", map[string]interface{}{
 		"locale": locale,
 	})
 }
 
 // ApplicationGetByIdentifier get the application.
 func (k *KYC) ApplicationGetByIdentifier(mType, identifier string, expand bool) (*Result, error) {
-	return k.session.getWithParams("/api/v1/application/identifier/" + mType + "/" + identifier, map[string]interface{}{
+	return k.session.getWithParams("/api/v1/application/identifier/"+mType+"/"+identifier, map[string]interface{}{
 		"expand": expand,
 	})
 }
 
 // ApplicationSubmit submit the application.
 func (k *KYC) ApplicationSubmit(applicationID string) (*Result, error) {
-	ret, err := k.session.get("/api/v1/application/" + applicationID)
-	if err != nil {
-		return nil, err
-	}
-
-	return k.session.put("/api/v1/application/" + applicationID, ret.Data["detail"].(map[string]interface{}))
+	return k.session.put("/api/v1/application/"+applicationID, map[string]interface{}{})
 }
 
 // KYC represent a kyc instance.
