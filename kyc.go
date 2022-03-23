@@ -88,7 +88,17 @@ func (k *KYC) ApplicationSubmit(applicationID string) (*Result, error) {
 	return k.session.put("/api/v1/application/"+applicationID, map[string]interface{}{})
 }
 
-// KYC represent a kyc instance.
+// FiatCreate create a fiat with the application.
+func (k *KYC) FiatCreate(applicationID string, content map[string]interface{}) (*Result, error) {
+	return k.session.post("/api/v1/application/"+applicationID, content)
+}
+
+// FiatsGet get fiats with the application.
+func (k *KYC) FiatsGet(applicationID string) (*Result, error) {
+	return k.session.get("/api/v1/application/" + applicationID + "/fiats")
+}
+
+// KYC represents a kyc instance.
 type KYC struct {
 	Addr   string
 	Key    string
