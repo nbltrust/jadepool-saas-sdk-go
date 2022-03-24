@@ -90,7 +90,7 @@ func (k *KYC) ApplicationSubmit(applicationID string) (*Result, error) {
 
 // FiatCreate create a fiat with the application.
 func (k *KYC) FiatCreate(applicationID string, content map[string]interface{}) (*Result, error) {
-	return k.session.post("/api/v1/application/"+applicationID, content)
+	return k.session.post("/api/v1/application/"+applicationID+"/fiat", content)
 }
 
 // FiatsGet get fiats with the application.
