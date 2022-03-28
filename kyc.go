@@ -88,6 +88,11 @@ func (k *KYC) ApplicationSubmit(applicationID string) (*Result, error) {
 	return k.session.put("/api/v1/application/"+applicationID, map[string]interface{}{})
 }
 
+// ApplicationSettingsUpdate update the settings of application.
+func (k *KYC) ApplicationSettingsUpdate(applicationID string, settings map[string]interface{}) (*Result, error) {
+	return k.session.put("/api/v1/application/"+applicationID, settings)
+}
+
 // FiatCreate create a fiat with the application.
 func (k *KYC) FiatCreate(applicationID string, content map[string]interface{}) (*Result, error) {
 	return k.session.post("/api/v1/application/"+applicationID+"/fiat", content)
