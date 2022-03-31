@@ -17,6 +17,7 @@ func runCommand(arguments docopt.Opts) (*sdk.Result, error) {
 	action, _ := arguments.String("<action>")
 	params := arguments["<params>"].([]string)
 	addr, _ := arguments.String("--address")
+	pubKey, _ := arguments.String("--pubkey")
 
 	switch action {
 	case "CreateAddress":
@@ -364,6 +365,12 @@ func runCommand(arguments docopt.Opts) (*sdk.Result, error) {
 		}
 
 		return getKYC(addr, key, secret).ApplicationSubmit(params[0])
+	case "BusinessAssetsGet":
+		result, err := getBusiness(addr, key, secret, pubKey).AssetsGet()
+		if err != nil {
+			return nil, err
+		}
+		return result.ToResult(), nil
 	default:
 		return nil, errors.New("unknown action: " + action)
 	}
@@ -387,16 +394,22 @@ func getKYC(addr, key, secret string) *sdk.KYC {
 	return sdk.NewKYCWithAddr(addr, key, secret)
 }
 
+func getBusiness(addr, key, secret, pubKey string) *sdk.Business {
+	b, _ := sdk.NewBusinessWithAddr(addr, key, secret, pubKey)
+	return b
+}
+
 func main() {
 	usage := `JadePool SAAS control tool.
 
 Usage:
-  ctl <key> <secret> <action> [<params>...] [-a <host>]
+  ctl <key> <secret> <action> [<params>...] [-a <host>] [-p <key>]
   ctl -h | --help
 
 Options:
   -h --help                   Show this screen.
-  -a <host>, --address <host> Use custom SAAS server, e.g., http://127.0.0.1:8092`
+  -a <host>, --address <host> Use custom SAAS server, e.g., http://127.0.0.1:8092
+  -p <key>, --pubkey <key> Use the public key pem file for verifying response`
 
 	arguments, _ := docopt.ParseDoc(usage)
 
@@ -408,6 +421,7 @@ Options:
 
 	fmt.Println("code:", result.Code)
 	fmt.Println("message:", result.Message)
+	fmt.Println("sign:", result.Sign)
 	fmt.Println("data:")
 	printMap(result.Data)
 }
