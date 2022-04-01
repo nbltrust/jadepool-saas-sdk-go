@@ -32,9 +32,24 @@ func NewBusinessWithAddr(addr, businessKey, pemFilePath, pubPemFilePath string) 
 	return a, nil
 }
 
+// ClientGet fetch client info.
+func (b *Business) ClientGet(userID uint) (*BusinessResult, error) {
+	return b.session.businessGetWithParams("/api/v1/business/client", map[string]interface{}{
+		"userID": userID,
+	})
+}
+
 // AssetsGet fetch all assets in the wallet.
 func (b *Business) AssetsGet() (*BusinessResult, error) {
 	return b.session.businessGet("/api/v1/business/assets")
+}
+
+// WalletBalancesGet fetch the asset balance in the wallet.
+func (b *Business) WalletBalancesGet(userID, assetID uint) (*BusinessResult, error) {
+	return b.session.businessGetWithParams("/api/v1/business/wallet/balances", map[string]interface{}{
+		"userID":  userID,
+		"assetID": assetID,
+	})
 }
 
 // Business represents a business instance.
