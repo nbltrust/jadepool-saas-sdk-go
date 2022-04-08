@@ -52,6 +52,26 @@ func (b *Business) WalletBalancesGet(userID, assetID uint) (*BusinessResult, err
 	})
 }
 
+// BalanceLock lock the balance.
+func (b *Business) BalanceLock(userID, assetID uint, sequence, amount string) (*BusinessResult, error) {
+	return b.session.businessPut("/api/v1/business/balance/lock", map[string]interface{}{
+		"userID":   userID,
+		"assetID":  assetID,
+		"sequence": sequence,
+		"amount":   amount,
+	})
+}
+
+// BalanceUnlock unlock the balance.
+func (b *Business) BalanceUnlock(userID, assetID uint, sequence, amount string) (*BusinessResult, error) {
+	return b.session.businessPut("/api/v1/business/balance/unlock", map[string]interface{}{
+		"userID":   userID,
+		"assetID":  assetID,
+		"sequence": sequence,
+		"amount":   amount,
+	})
+}
+
 // Business represents a business instance.
 type Business struct {
 	Addr   string

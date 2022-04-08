@@ -302,6 +302,34 @@ func (session *session) put(path string, params params) (*Result, error) {
 	return &result, err
 }
 
+func (session *session) businessPut(path string, params businessParams) (*BusinessResult, error) {
+	url := session.getURL(path)
+	err := session.businessPrepareParams(http.MethodPut, path, params)
+	if err != nil {
+		return nil, err
+	}
+
+	r, err := req.Put(url, session.commonHeaders(), req.BodyJSON(&params))
+	if err != nil {
+		return nil, err
+	}
+	if r.Response().StatusCode != 200 {
+		return nil, fmt.Errorf("http error code:%d", r.Response().StatusCode)
+	}
+
+	var result BusinessResult
+	err = r.ToJSON(&result)
+	if err != nil {
+		return nil, fmt.Errorf("parse body to json failed: %v", err)
+	}
+
+	if err = result.error(session.client.getPubKey()); err != nil {
+		return nil, err
+	}
+
+	return &result, err
+}
+
 func (session *session) delete(path string) (*Result, error) {
 	return session.deleteWithParams(path, map[string]interface{}{})
 }
@@ -380,8 +408,15 @@ func (params *businessParams) sign(method, path string, priKeyPemBase64 string) 
 	if err != nil {
 		return err
 	}
-	(*params)["sigR"] = sign.R
-	(*params)["sigS"] = sign.S
+	if method == http.MethodGet {
+		(*params)["sigR"] = sign.R
+		(*params)["sigS"] = sign.S
+	} else {
+		(*params)["sig"] = map[string]interface{}{
+			"r": sign.R,
+			"s": sign.S,
+		}
+	}
 	return nil
 }
 

@@ -406,6 +406,46 @@ func runCommand(arguments docopt.Opts) (*sdk.Result, error) {
 			return nil, err
 		}
 		return result.ToResult(), nil
+	case "BusinessBalanceLock":
+		if len(params) != 4 {
+			return nil, errors.New("invalid params")
+		}
+
+		uid, err := strconv.ParseUint(params[0], 10, 64)
+		if err != nil {
+			return nil, errors.New("invalid params")
+		}
+
+		aid, err := strconv.ParseUint(params[1], 10, 64)
+		if err != nil {
+			return nil, errors.New("invalid params")
+		}
+
+		result, err := getBusiness(addr, key, secret, pubKey).BalanceLock(uint(uid), uint(aid), params[2], params[3])
+		if err != nil {
+			return nil, err
+		}
+		return result.ToResult(), nil
+	case "BusinessBalanceUnlock":
+		if len(params) != 4 {
+			return nil, errors.New("invalid params")
+		}
+
+		uid, err := strconv.ParseUint(params[0], 10, 64)
+		if err != nil {
+			return nil, errors.New("invalid params")
+		}
+
+		aid, err := strconv.ParseUint(params[1], 10, 64)
+		if err != nil {
+			return nil, errors.New("invalid params")
+		}
+
+		result, err := getBusiness(addr, key, secret, pubKey).BalanceUnlock(uint(uid), uint(aid), params[2], params[3])
+		if err != nil {
+			return nil, err
+		}
+		return result.ToResult(), nil
 	default:
 		return nil, errors.New("unknown action: " + action)
 	}
