@@ -85,6 +85,24 @@ func (b *Business) Swap(from, fromAssetID, officialAssetID uint, sequence, fromA
 	})
 }
 
+// Batch batch.
+func (b *Business) Batch(cmd []*BatchCommand) (*BusinessResult, error) {
+	return b.session.businessPost("/api/v1/business/batch", map[string]interface{}{
+		"cmd": cmd,
+	})
+}
+
+// BatchCommand ...
+type BatchCommand struct {
+	Name string      `json:"name"`
+	Args interface{} `json:"args"`
+}
+
+// OrderGetBySequence fetch the order by the sequence.
+func (b *Business) OrderGetBySequence(sequence string) (*BusinessResult, error) {
+	return b.session.businessGet("/api/v1/business/order/sequence/" + sequence)
+}
+
 // Business represents a business instance.
 type Business struct {
 	Addr   string

@@ -471,6 +471,31 @@ func runCommand(arguments docopt.Opts) (*sdk.Result, error) {
 			return nil, err
 		}
 		return result.ToResult(), nil
+	case "BusinessBatch":
+		if len(params) != 1 {
+			return nil, errors.New("invalid params")
+		}
+
+		cmd := []*sdk.BatchCommand{}
+		err := json.NewDecoder(strings.NewReader(params[0])).Decode(&cmd)
+		if err != nil {
+			return nil, err
+		}
+		result, err := getBusiness(addr, key, secret, pubKey).Batch(cmd)
+		if err != nil {
+			return nil, err
+		}
+		return result.ToResult(), nil
+	case "BusinessOrderGet":
+		if len(params) != 1 {
+			return nil, errors.New("invalid params")
+		}
+
+		result, err := getBusiness(addr, key, secret, pubKey).OrderGetBySequence(params[0])
+		if err != nil {
+			return nil, err
+		}
+		return result.ToResult(), nil
 	default:
 		return nil, errors.New("unknown action: " + action)
 	}
