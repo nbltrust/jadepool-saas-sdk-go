@@ -72,6 +72,19 @@ func (b *Business) BalanceUnlock(userID, assetID uint, sequence, amount string) 
 	})
 }
 
+// Swap swap.
+func (b *Business) Swap(from, fromAssetID, officialAssetID uint, sequence, fromAmount, officialAmount, note string) (*BusinessResult, error) {
+	return b.session.businessPost("/api/v1/business/swap", map[string]interface{}{
+		"from":            from,
+		"fromAssetID":     fromAssetID,
+		"officialAssetID": officialAssetID,
+		"sequence":        sequence,
+		"fromAmount":      fromAmount,
+		"officialAmount":  officialAmount,
+		"note":            note,
+	})
+}
+
 // Business represents a business instance.
 type Business struct {
 	Addr   string

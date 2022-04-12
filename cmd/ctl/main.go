@@ -411,17 +411,17 @@ func runCommand(arguments docopt.Opts) (*sdk.Result, error) {
 			return nil, errors.New("invalid params")
 		}
 
-		uid, err := strconv.ParseUint(params[0], 10, 64)
+		uid, err := strconv.ParseUint(params[1], 10, 64)
 		if err != nil {
 			return nil, errors.New("invalid params")
 		}
 
-		aid, err := strconv.ParseUint(params[1], 10, 64)
+		aid, err := strconv.ParseUint(params[2], 10, 64)
 		if err != nil {
 			return nil, errors.New("invalid params")
 		}
 
-		result, err := getBusiness(addr, key, secret, pubKey).BalanceLock(uint(uid), uint(aid), params[2], params[3])
+		result, err := getBusiness(addr, key, secret, pubKey).BalanceLock(uint(uid), uint(aid), params[0], params[3])
 		if err != nil {
 			return nil, err
 		}
@@ -431,17 +431,42 @@ func runCommand(arguments docopt.Opts) (*sdk.Result, error) {
 			return nil, errors.New("invalid params")
 		}
 
-		uid, err := strconv.ParseUint(params[0], 10, 64)
+		uid, err := strconv.ParseUint(params[1], 10, 64)
 		if err != nil {
 			return nil, errors.New("invalid params")
 		}
 
-		aid, err := strconv.ParseUint(params[1], 10, 64)
+		aid, err := strconv.ParseUint(params[2], 10, 64)
 		if err != nil {
 			return nil, errors.New("invalid params")
 		}
 
-		result, err := getBusiness(addr, key, secret, pubKey).BalanceUnlock(uint(uid), uint(aid), params[2], params[3])
+		result, err := getBusiness(addr, key, secret, pubKey).BalanceUnlock(uint(uid), uint(aid), params[0], params[3])
+		if err != nil {
+			return nil, err
+		}
+		return result.ToResult(), nil
+	case "BusinessSwap":
+		if len(params) != 6 {
+			return nil, errors.New("invalid params")
+		}
+
+		uid, err := strconv.ParseUint(params[1], 10, 64)
+		if err != nil {
+			return nil, errors.New("invalid params")
+		}
+
+		aid, err := strconv.ParseUint(params[2], 10, 64)
+		if err != nil {
+			return nil, errors.New("invalid params")
+		}
+
+		oaid, err := strconv.ParseUint(params[4], 10, 64)
+		if err != nil {
+			return nil, errors.New("invalid params")
+		}
+
+		result, err := getBusiness(addr, key, secret, pubKey).Swap(uint(uid), uint(aid), uint(oaid), params[0], params[3], params[5], "")
 		if err != nil {
 			return nil, err
 		}
