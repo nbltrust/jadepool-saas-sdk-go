@@ -446,6 +446,31 @@ func runCommand(arguments docopt.Opts) (*sdk.Result, error) {
 			return nil, err
 		}
 		return result.ToResult(), nil
+	case "BusinessTransfer":
+		if len(params) != 5 {
+			return nil, errors.New("invalid params")
+		}
+
+		aid, err := strconv.ParseUint(params[1], 10, 64)
+		if err != nil {
+			return nil, errors.New("invalid params")
+		}
+
+		fid, err := strconv.ParseUint(params[3], 10, 64)
+		if err != nil {
+			return nil, errors.New("invalid params")
+		}
+
+		tid, err := strconv.ParseUint(params[4], 10, 64)
+		if err != nil {
+			return nil, errors.New("invalid params")
+		}
+
+		result, err := getBusiness(addr, key, secret, pubKey).Transfer(uint(fid), uint(tid), uint(aid), params[0], params[2], "")
+		if err != nil {
+			return nil, err
+		}
+		return result.ToResult(), nil
 	case "BusinessSwap":
 		if len(params) != 6 {
 			return nil, errors.New("invalid params")

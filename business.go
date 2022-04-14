@@ -72,6 +72,18 @@ func (b *Business) BalanceUnlock(userID, assetID uint, sequence, amount string) 
 	})
 }
 
+// Transfer transfer.
+func (b *Business) Transfer(from, to, assetID uint, sequence, amount, note string) (*BusinessResult, error) {
+	return b.session.businessPost("/api/v1/business/transfer", map[string]interface{}{
+		"from":     from,
+		"to":       to,
+		"sequence": sequence,
+		"assetID":  assetID,
+		"amount":   amount,
+		"note":     note,
+	})
+}
+
 // Swap swap.
 func (b *Business) Swap(from, fromAssetID, officialAssetID uint, sequence, fromAmount, officialAmount, note string) (*BusinessResult, error) {
 	return b.session.businessPost("/api/v1/business/swap", map[string]interface{}{
