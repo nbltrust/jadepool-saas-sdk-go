@@ -80,3 +80,11 @@ go run cmd/ctl/main.go hashkey-hub pri_hashkey-hub.pem BusinessTransfer 16504584
   "id": 4
 }
 ```
+
+go run cmd/ctl/main.go hashkey-hub pri_hashkey-hub.pem BusinessSwap 165045845515 435 2 0.11 1 1.22 -a "https://develop-saas.nbltrust.com/saas-business" -p pub_xpert_238.pem
+
+```json
+{
+  "id": 7
+}
+```
