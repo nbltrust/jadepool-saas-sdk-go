@@ -6,7 +6,7 @@ go mod tidy
 
 prepare pri_hashkey-hub.pem and pub_xpert_238.pem  
 
-go run cmd/ctl/main.go hashkey-hub pri_hashkey-hub.pem BusinessAssetsGet -a "https://develop-saas.nbltrust.com/business" -p pub_xpert_238.pem  
+go run cmd/ctl/main.go hashkey-hub pri_hashkey-hub.pem BusinessAssetsGet -a "https://develop-saas.nbltrust.com/saas-business" -p pub_xpert_238.pem  
 
 should see something like below 
 
