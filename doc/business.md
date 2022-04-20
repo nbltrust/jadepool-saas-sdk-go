@@ -8,7 +8,7 @@ prepare pri_hashkey-hub.pem and pub_xpert_238.pem
 
 go run cmd/ctl/main.go hashkey-hub pri_hashkey-hub.pem BusinessAssetsGet -a "https://develop-saas.nbltrust.com/saas-business" -p pub_xpert_238.pem  
 
-`
+```json
 {
   "assets": [
     {
@@ -25,11 +25,11 @@ go run cmd/ctl/main.go hashkey-hub pri_hashkey-hub.pem BusinessAssetsGet -a "htt
     }
   ]
 }
-`
+```
 
 go run cmd/ctl/main.go hashkey-hub pri_hashkey-hub.pem BusinessClientGet 235 -a "https://develop-saas.nbltrust.com/saas-business" -p pub_xpert_238.pem
 
-`
+```json
 {
   "email": "cob63176@tuofs.com",
   "id": 235,
@@ -37,4 +37,4 @@ go run cmd/ctl/main.go hashkey-hub pri_hashkey-hub.pem BusinessClientGet 235 -a 
   "name": "Christina",
   "phone": "+86-13817572905"
 }
-`
+```
