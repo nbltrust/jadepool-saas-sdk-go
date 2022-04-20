@@ -54,3 +54,29 @@ go run cmd/ctl/main.go hashkey-hub pri_hashkey-hub.pem BusinessWalletBalancesGet
   ]
 }
 ```
+
+go run cmd/ctl/main.go hashkey-hub pri_hashkey-hub.pem BusinessBalanceLock 165045845511 435 1 11 -a "https://develop-saas.nbltrust.com/saas-business" -p pub_xpert_238.pem
+
+```json
+{
+  "available": "989.000000000000000000",
+  "total": "1000.000000000000000000"
+}
+```
+
+go run cmd/ctl/main.go hashkey-hub pri_hashkey-hub.pem BusinessBalanceUnlock 165045845512 435 1 6 -a "https://develop-saas.nbltrust.com/saas-business" -p pub_xpert_238.pem
+
+```json
+{
+  "available": "995.000000000000000000",
+  "total": "1000.000000000000000000"
+}
+```
+
+go run cmd/ctl/main.go hashkey-hub pri_hashkey-hub.pem BusinessTransfer 165045845513 1 4.1 435 235 -a "https://develop-saas.nbltrust.com/saas-business" -p pub_xpert_238.pem
+
+```json
+{
+  "id": 4
+}
+```
