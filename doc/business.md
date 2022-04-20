@@ -88,3 +88,24 @@ go run cmd/ctl/main.go hashkey-hub pri_hashkey-hub.pem BusinessSwap 165045845515
   "id": 7
 }
 ```
+
+go run cmd/ctl/main.go hashkey-hub pri_hashkey-hub.pem BusinessOrderGet 165045845515 -a "https://develop-saas.nbltrust.com/saas-business" -p pub_xpert_238.pem
+
+```json
+{
+  "detail": {
+    "from": 435,
+    "fromAmount": "0.11",
+    "fromAssetID": 2,
+    "fromWalletID": 1339,
+    "note": "",
+    "officialAmount": "1.22",
+    "officialAssetID": 1,
+    "officialWalletID": 1307,
+    "sequence": "165045845515"
+  },
+  "id": 7,
+  "status": "DONE",
+  "type": "SWAP"
+}
+```
