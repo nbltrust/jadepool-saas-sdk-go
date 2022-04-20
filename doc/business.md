@@ -38,3 +38,19 @@ go run cmd/ctl/main.go hashkey-hub pri_hashkey-hub.pem BusinessClientGet 235 -a 
   "phone": "+86-13817572905"
 }
 ```
+
+go run cmd/ctl/main.go hashkey-hub pri_hashkey-hub.pem BusinessWalletBalancesGet 435 1 -a "https://develop-saas.nbltrust.com/saas-business" -p pub_xpert_238.pem
+
+```json
+{
+  "balances": [
+    {
+      "assetID": 1,
+      "assetName": "ETH",
+      "available": "1000.000000000000000000",
+      "locked": "0.000000000000000000",
+      "total": "1000.000000000000000000"
+    }
+  ]
+}
+```
