@@ -108,6 +108,11 @@ func (k *KYC) FiatDelete(fiatID string) (*Result, error) {
 	return k.session.delete("/api/v1/fiat/" + fiatID)
 }
 
+// ApplicationHistoriesGet get the change histories with the application.
+func (k *KYC) ApplicationHistoriesGet(applicationID string) (*Result, error) {
+	return k.session.get("/api/v1/application/" + applicationID + "/histories")
+}
+
 // KYC represents a kyc instance.
 type KYC struct {
 	Addr   string
