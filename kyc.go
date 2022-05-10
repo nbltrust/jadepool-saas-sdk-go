@@ -93,6 +93,11 @@ func (k *KYC) ApplicationSettingsUpdate(applicationID string, settings map[strin
 	return k.session.put("/api/v1/application/"+applicationID+"/settings", settings)
 }
 
+// JumioPost post jumio result with the application.
+func (k *KYC) JumioPost(applicationID string, content map[string]interface{}) (*Result, error) {
+	return k.session.post("/api/v1/application/"+applicationID+"/jumio", content)
+}
+
 // FiatCreate create a fiat with the application.
 func (k *KYC) FiatCreate(applicationID string, content map[string]interface{}) (*Result, error) {
 	return k.session.post("/api/v1/application/"+applicationID+"/fiat", content)
