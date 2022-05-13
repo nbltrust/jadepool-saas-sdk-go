@@ -229,6 +229,17 @@ func main() {
 	})
 	e.POST("/pong", func(c echo.Context) error {
 		requestBody, _ := ioutil.ReadAll(c.Request().Body)
+		fmt.Println(string(requestBody))
+
+		for key, value := range c.Request().Header {
+			fmt.Print(key)
+
+			for v := range value {
+				fmt.Printf("\t%v", v)
+			}
+
+			fmt.Println()
+		}
 
 		iv := c.Request().Header.Get("X-Encrypt-Iv")
 		var encrypted encryptedReqBody
@@ -259,7 +270,7 @@ func main() {
 
 		ivBase64 := base64.StdEncoding.EncodeToString(ivNew)
 
-		fmt.Printf("response msg:%v\n", string(msg))
+		fmt.Printf("response msg: %v\n", string(msg))
 		fmt.Printf("response iv: %v\n", ivBase64)
 
 		u := &encryptedResBody{
