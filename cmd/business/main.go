@@ -234,7 +234,7 @@ func main() {
 		for key, value := range c.Request().Header {
 			fmt.Print(key)
 
-			for v := range value {
+			for _, v := range value {
 				fmt.Printf("\t%v", v)
 			}
 
@@ -242,6 +242,7 @@ func main() {
 		}
 
 		iv := c.Request().Header.Get("X-Encrypt-Iv")
+		userId := c.Request().Header.Get("X-User-Id")
 		var encrypted encryptedReqBody
 		err := json.Unmarshal(requestBody, &encrypted)
 		if err != nil {
@@ -262,7 +263,7 @@ func main() {
 		}
 
 		timeStr := time.Now().Format("2006-01-02 15:04:05")
-		response_plain_msg := fmt.Sprintf(`{"kkk":"hahaha","ts":%v}`, timeStr)
+		response_plain_msg := fmt.Sprintf(`{"kkk":"hahaha","userID":"%v","ts":%v}`, userId, timeStr)
 		msg, ivNew, err2 := encryptResBody(response_plain_msg, aesKey)
 		if err2 != nil {
 			fmt.Printf("%v\n", err2)
