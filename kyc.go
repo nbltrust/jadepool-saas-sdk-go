@@ -108,6 +108,11 @@ func (k *KYC) FiatsGet(applicationID string) (*Result, error) {
 	return k.session.get("/api/v1/application/" + applicationID + "/fiats")
 }
 
+// FiatUpdate update the fiat.
+func (k *KYC) FiatUpdate(fiatID string, content map[string]interface{}) (*Result, error) {
+	return k.session.put("/api/v1/fiat/"+fiatID, content)
+}
+
 // FiatDelete delete the fiat.
 func (k *KYC) FiatDelete(fiatID string) (*Result, error) {
 	return k.session.delete("/api/v1/fiat/" + fiatID)
