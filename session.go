@@ -321,10 +321,6 @@ func (params *params) sign(secret string) error {
 }
 
 func (result *Result) error(secret string) error {
-	if !result.success() {
-		return errors.New(result.Message)
-	}
-
 	if !result.checkSign(secret) {
 		return errors.New("check sign failed")
 	}
