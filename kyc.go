@@ -70,9 +70,10 @@ func (k *KYC) ApplicationGet(applicationID string, expand bool) (*Result, error)
 }
 
 // ApplicationJumioGet get the application's jumio info.
-func (k *KYC) ApplicationJumioGet(applicationID, locale string) (*Result, error) {
+func (k *KYC) ApplicationJumioGet(applicationID, locale, id string) (*Result, error) {
 	return k.session.getWithParams("/api/v1/application/"+applicationID+"/jumio", map[string]interface{}{
 		"locale": locale,
+		"id":     id,
 	})
 }
 
