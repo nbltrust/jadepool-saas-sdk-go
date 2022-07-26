@@ -406,6 +406,26 @@ func runCommand(arguments docopt.Opts) (*sdk.Result, error) {
 			return nil, err
 		}
 		return result.ToResult(), nil
+	case "BusinessBalanceSettle":
+		if len(params) != 5 {
+			return nil, errors.New("invalid params")
+		}
+
+		uid, err := strconv.ParseUint(params[1], 10, 64)
+		if err != nil {
+			return nil, errors.New("invalid params")
+		}
+
+		aid, err := strconv.ParseUint(params[2], 10, 64)
+		if err != nil {
+			return nil, errors.New("invalid params")
+		}
+
+		result, err := getBusiness(addr, key, secret, pubKey).BalanceSettle(uint(uid), uint(aid), params[0], params[3], params[4])
+		if err != nil {
+			return nil, err
+		}
+		return result.ToResult(), nil
 	case "BusinessBalanceLock":
 		if len(params) != 4 {
 			return nil, errors.New("invalid params")
@@ -517,6 +537,31 @@ func runCommand(arguments docopt.Opts) (*sdk.Result, error) {
 		}
 
 		result, err := getBusiness(addr, key, secret, pubKey).OrderGetBySequence(params[0])
+		if err != nil {
+			return nil, err
+		}
+		return result.ToResult(), nil
+	case "BusinessTransactionsGet":
+		if len(params) != 5 {
+			return nil, errors.New("invalid params")
+		}
+
+		uid, err := strconv.ParseUint(params[0], 10, 64)
+		if err != nil {
+			return nil, errors.New("invalid params")
+		}
+
+		page, err := strconv.ParseUint(params[3], 10, 64)
+		if err != nil {
+			return nil, errors.New("invalid params")
+		}
+
+		amount, err := strconv.ParseUint(params[4], 10, 64)
+		if err != nil {
+			return nil, errors.New("invalid params")
+		}
+
+		result, err := getBusiness(addr, key, secret, pubKey).TransactionsGet(uint(uid), params[1], params[2], uint(page), uint(amount))
 		if err != nil {
 			return nil, err
 		}

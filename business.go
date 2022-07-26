@@ -52,6 +52,17 @@ func (b *Business) WalletBalancesGet(userID, assetID uint) (*BusinessResult, err
 	})
 }
 
+// BalanceSettle settle the balance.
+func (b *Business) BalanceSettle(userID, assetID uint, mType, sequence, amount string) (*BusinessResult, error) {
+	return b.session.businessPost("/api/v1/business/balance/settle", map[string]interface{}{
+		"userID":   userID,
+		"assetID":  assetID,
+		"type":     mType,
+		"sequence": sequence,
+		"amount":   amount,
+	})
+}
+
 // BalanceLock lock the balance.
 func (b *Business) BalanceLock(userID, assetID uint, sequence, amount string) (*BusinessResult, error) {
 	return b.session.businessPut("/api/v1/business/balance/lock", map[string]interface{}{
@@ -113,6 +124,17 @@ type BatchCommand struct {
 // OrderGetBySequence fetch the order by the sequence.
 func (b *Business) OrderGetBySequence(sequence string) (*BusinessResult, error) {
 	return b.session.businessGet("/api/v1/business/order/sequence/" + sequence)
+}
+
+// TransactionsGet fetch transactions.
+func (b *Business) TransactionsGet(userID uint, mType, status string, page, amount uint) (*BusinessResult, error) {
+	return b.session.businessGetWithParams("/api/v1/business/transactions", map[string]interface{}{
+		"userID": userID,
+		"type":   mType,
+		"status": status,
+		"page":   page,
+		"amount": amount,
+	})
 }
 
 // Business represents a business instance.
