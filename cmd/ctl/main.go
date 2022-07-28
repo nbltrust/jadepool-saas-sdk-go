@@ -386,6 +386,41 @@ func runCommand(arguments docopt.Opts) (*sdk.Result, error) {
 			return nil, err
 		}
 		return result.ToResult(), nil
+	case "BusinessClientsGet":
+		if len(params) != 2 {
+			return nil, errors.New("invalid params")
+		}
+
+		page, err := strconv.ParseUint(params[0], 10, 64)
+		if err != nil {
+			return nil, errors.New("invalid params")
+		}
+
+		amount, err := strconv.ParseUint(params[1], 10, 64)
+		if err != nil {
+			return nil, errors.New("invalid params")
+		}
+
+		result, err := getBusiness(addr, key, secret, pubKey).ClientsGet(uint(page), uint(amount))
+		if err != nil {
+			return nil, err
+		}
+		return result.ToResult(), nil
+	case "BusinessClientCardsGet":
+		if len(params) != 1 {
+			return nil, errors.New("invalid params")
+		}
+
+		uid, err := strconv.ParseUint(params[0], 10, 64)
+		if err != nil {
+			return nil, errors.New("invalid params")
+		}
+
+		result, err := getBusiness(addr, key, secret, pubKey).ClientCardsGet(uint(uid))
+		if err != nil {
+			return nil, err
+		}
+		return result.ToResult(), nil
 	case "BusinessWalletBalancesGet":
 		if len(params) != 2 {
 			return nil, errors.New("invalid params")

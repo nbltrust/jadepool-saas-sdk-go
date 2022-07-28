@@ -39,6 +39,21 @@ func (b *Business) ClientGet(userID uint) (*BusinessResult, error) {
 	})
 }
 
+// ClientsGet fetch clients.
+func (b *Business) ClientsGet(page, amount uint) (*BusinessResult, error) {
+	return b.session.businessGetWithParams("/api/v1/business/clients", map[string]interface{}{
+		"page":   page,
+		"amount": amount,
+	})
+}
+
+// ClientCardsGet fetch client's cards.
+func (b *Business) ClientCardsGet(userID uint) (*BusinessResult, error) {
+	return b.session.businessGetWithParams("/api/v1/business/client/cards", map[string]interface{}{
+		"userID": userID,
+	})
+}
+
 // AssetsGet fetch all assets in the wallet.
 func (b *Business) AssetsGet() (*BusinessResult, error) {
 	return b.session.businessGet("/api/v1/business/assets")
