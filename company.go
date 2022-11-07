@@ -45,6 +45,7 @@ func (c *Company) FundingTransferWithMemo(from, to, coinType, value, memo string
 		"value":     value,
 		"assetName": coinType,
 		"memo":      memo,
+		"message":   "",
 	})
 }
 
