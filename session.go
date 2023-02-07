@@ -87,9 +87,7 @@ func (session *session) getFile(path string, filePath string) (*Result, error) {
 	return &result, err
 }
 
-func (session *session) getFile2(path string) (*req.Resp, error) {
-	params := params{}
-
+func (session *session) getFile2(path string, params params) (*req.Resp, error) {
 	url := session.getURL(path)
 	err := session.prepareParams(params)
 	if err != nil {

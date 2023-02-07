@@ -37,8 +37,10 @@ func (k *KYC) FileGet(fileID, filePath string) (*Result, error) {
 }
 
 // FileGet2 get file.
-func (k *KYC) FileGet2(fileID string) (*req.Resp, error) {
-	return k.session.getFile2("/api/v1/file/" + fileID)
+func (k *KYC) FileGet2(fileID, applicationID string) (*req.Resp, error) {
+	return k.session.getFile2("/api/v1/file/"+fileID, map[string]interface{}{
+		"applicationID": applicationID,
+	})
 }
 
 // ApplicationCreate create an application.
