@@ -191,9 +191,7 @@ func (session *session) postFile(path string, filePath string) (*Result, error) 
 	return &result, err
 }
 
-func (session *session) postFile2(path, fileName string, file *bytes.Reader) (*Result, error) {
-	params := params{}
-
+func (session *session) postFile2(path, fileName string, file *bytes.Reader, params params) (*Result, error) {
 	url := session.getURL(path)
 	err := session.prepareParams(params)
 	if err != nil {

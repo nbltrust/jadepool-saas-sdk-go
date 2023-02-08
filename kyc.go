@@ -27,8 +27,10 @@ func (k *KYC) FileUpload(filePath string) (*Result, error) {
 }
 
 // FileUpload2 upload file.
-func (k *KYC) FileUpload2(fileName string, file *bytes.Reader) (*Result, error) {
-	return k.session.postFile2("/api/v1/file", fileName, file)
+func (k *KYC) FileUpload2(applicationID, fileName string, file *bytes.Reader) (*Result, error) {
+	return k.session.postFile2("/api/v1/file", fileName, file, map[string]interface{}{
+		"applicationID": applicationID,
+	})
 }
 
 // FileGet get file.
