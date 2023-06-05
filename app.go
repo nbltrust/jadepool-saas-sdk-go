@@ -83,7 +83,7 @@ func (a *App) GetAppInfo() (*Result, error) {
 // AddAsset add asset into the wallet.
 func (a *App) AddAsset(coinName string) (*Result, error) {
 	return a.session.post("/api/v1/app/assets", map[string]interface{}{
-		"coinNames": []string{coinName},
+		"coinName": coinName,
 	})
 }
 
